@@ -51,7 +51,7 @@ Have you built something with FAST? We'd love to see it! Please see [CONTRIBUTIN
 
 ## Important Notes
 
-- **No customer data**: Samples should not contain any customer-specific data or information
+- **No sensitive data**: Samples should not contain any company-specific or sensitive data or information
 - **Security**: Follow the same security best practices established in the main FAST repository
 - **Documentation**: Each sample should include clear documentation about what it does and how it differs from base FAST
 

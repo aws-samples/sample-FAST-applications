@@ -1,58 +1,154 @@
-# Contributing Guidelines
+# Contributing to FAST Samples
 
-Thank you for your interest in contributing to our project. Whether it's a bug report, new feature, correction, or additional
-documentation, we greatly value feedback and contributions from our community.
+Thank you for your interest in contributing to our project. We greatly value feedback and contributions from our community.
 
 Please read through this document before submitting any issues or pull requests to ensure we have all the necessary
 information to effectively respond to your bug report or contribution.
 
+## Contributing a Sample Application
 
-## Reporting Bugs/Feature Requests
+Have you built something with FAST? We'd love to see it! This section will help you prepare and submit your FAST-based project as a sample for others to learn from.
 
-We welcome you to use the GitHub issue tracker to report bugs or suggest features.
+### Before You Contribute
 
-When filing an issue, please check existing open, or recently closed, issues to make sure somebody else hasn't already
-reported the issue. Please try to include as much information as you can. Details like these are incredibly useful:
+#### Prerequisites
+- Your sample application should be built starting from [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcore)
+- The application should be functional and deployable
+- You should be willing to be listed as a contact person for questions about your sample
 
-* A reproducible test case or series of steps
-* The version of our code being used
-* Any modifications you've made relevant to the bug
-* Anything unusual about your environment or deployment
+#### Content Guidelines
+- **No proprietary data**: Remove all company-specific data, credentials, and sensitive information
+- **Anonymize references**: Avoid company or organization names when possible; use generic names or anonymize
+- **Security**: Ensure your sample follows the same security best practices as FAST
+- **Documentation**: Your sample should be well-documented and easy to understand
 
+### 1. Prepare Your Sample
 
-## Contributing via Pull Requests
-Contributions via pull requests are much appreciated. Before sending us a pull request, please ensure that:
+#### Directory Structure
+Create your sample in the following structure:
+```
+samples/your-sample-name/
+├── README.md              # Sample-specific documentation including an architecture diagram
+└── [your application files and directories]
+```
 
-1. You are working against the latest source on the *main* branch.
-2. You check existing open, and recently merged, pull requests to make sure someone else hasn't addressed the problem already.
-3. You open an issue to discuss any significant work - we would hate for your time to be wasted.
+#### Copying Your Sample
+To copy your FAST-based application to the samples repository, use rsync to exclude build artifacts and git history:
 
-To send us a pull request, please:
+```bash
+# Navigate to the samples repository
+cd /path/to/sample-FAST-applications
 
-1. Fork the repository.
-2. Modify the source; please focus on the specific change you are contributing. If you also reformat all the code, it will be hard for us to focus on your change.
-3. Ensure local tests pass.
-4. Commit to your fork using clear commit messages.
-5. Send us a pull request, answering any default questions in the pull request interface.
-6. Pay attention to any automated CI failures reported in the pull request, and stay involved in the conversation.
+# Create your sample directory
+mkdir -p samples/your-sample-name
 
-GitHub provides additional document on [forking a repository](https://help.github.com/articles/fork-a-repo/) and
-[creating a pull request](https://help.github.com/articles/creating-a-pull-request/).
+# Copy files excluding build artifacts, git history, and cache files
+rsync -av \
+  --exclude='.git' \
+  --exclude='node_modules' \
+  --exclude='cdk.out' \
+  --exclude='cdk.context.json' \
+  --exclude='.next' \
+  --exclude='frontend/build' \
+  --exclude='__pycache__' \
+  --exclude='.ruff_cache' \
+  --exclude='.venv' \
+  --exclude='.agentcore.json' \
+  --exclude='.gitlab-ci.yml' \
+  /path/to/your-FAST-project/ samples/your-sample-name/
+```
 
+This ensures only source code and documentation are copied, keeping the repository clean and focused.
 
-## Finding contributions to work on
-Looking at the existing issues is a great way to find something to contribute on. As our projects, by default, use the default GitHub issue labels (enhancement/bug/duplicate/help wanted/invalid/question/wontfix), looking at any 'help wanted' issues is a great place to start.
+After copying, check for any files containing deployment-specific values (e.g. `frontend/public/aws-exports.json`) and replace real AWS account IDs, Cognito pool IDs, ARNs, Amplify domains, and API Gateway URLs with generic placeholders like `<account-id>`, `<region>`, `<your-amplify-domain>`, etc.
+
+#### Passing CI Lint Checks
+
+The CI pipeline runs Python linting (ruff) and JS/TS linting (ESLint + Prettier) on changed samples. To catch issues before pushing, run from your sample directory:
+
+```bash
+cd samples/your-sample-name
+
+# Install ruff if you don't have it (also listed in requirements-dev.txt)
+pip install ruff
+
+# Python lint + format check (or use: make lint-cicd)
+ruff check
+ruff format --check
+
+# Auto-fix Python issues (or use: make lint)
+ruff check --fix
+ruff format
+
+# JS/TS lint + format check
+cd frontend && npm ci && npx eslint src/ && npx prettier --check "src/**/*.{ts,tsx,js,jsx,css,json}"
+```
+
+#### Required Documentation
+Your sample's `README.md` should include:
+- **Overview**: What your sample does and its use case
+- **Key Differences**: How it differs from base FAST
+- **Architecture**: Any architectural changes or additions
+- **Prerequisites**: What users need before deploying
+- **Deployment**: Step-by-step deployment instructions
+- **Usage**: How to use the deployed application
+
+### 2. Submit Your Contribution
+
+#### Step 1: Add Your Sample
+1. Fork this repository
+2. Create a new directory under `samples/` with a descriptive name (use kebab-case)
+3. Add your application code and documentation
+4. Test that your deployment instructions work
+
+#### Step 2: Update the Main README
+Add your sample to the "Available Samples" section in the main README.md:
+
+```markdown
+### [Your Sample Name](samples/your-sample-directory/)
+**Description**: Brief description of what this sample demonstrates
+**Built on FAST**: version
+**Key Differences from FAST**: What makes this sample unique
+**Use Case**: When someone might want to use this pattern
+```
+
+#### Step 3: Create a Pull Request
+1. Commit your changes with clear commit messages
+2. Push to your fork
+3. Create a pull request with:
+   - Clear title describing your sample
+   - Description explaining what your sample does
+   - Any special notes for reviewers
+
+### 3. Review Process
+
+Your contribution will be reviewed for:
+- **Completeness**: All required documentation is present
+- **Security**: No sensitive data or security issues
+- **Quality**: Code and documentation meet basic quality standards
+- **Functionality**: Deployment instructions work as documented
+
+### Sample Naming Conventions
+
+Use descriptive, kebab-case names that indicate the key technology or use case:
+- `langchain-async-research-agent`
+- `multi-modal-document-analysis`
+- `real-time-streaming-chat`
+
+### Contributing Back to FAST
+
+If your sample reveals improvements that could benefit the base FAST repository, consider submitting a pull request to the main [FAST repository](https://github.com/awslabs/fullstack-solution-template-for-agentcore) with your insights and suggested changes.
 
 
 ## Code of Conduct
+
 This project has adopted the [Amazon Open Source Code of Conduct](https://aws.github.io/code-of-conduct).
 For more information see the [Code of Conduct FAQ](https://aws.github.io/code-of-conduct-faq) or contact
 opensource-codeofconduct@amazon.com with any additional questions or comments.
 
+## Security Issue Notifications
 
-## Security issue notifications
-If you discover a potential security issue in this project we ask that you notify AWS/Amazon Security via our [vulnerability reporting page](http://aws.amazon.com/security/vulnerability-reporting/). Please do **not** create a public github issue.
-
+If you discover a potential security issue in this project we ask that you notify AWS/Amazon Security via our [vulnerability reporting page](http://aws.amazon.com/security/vulnerability-reporting/). Please do **not** create a public GitHub issue.
 
 ## Licensing
 

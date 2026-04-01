@@ -3,7 +3,6 @@
 import json
 import logging
 import os
-import traceback
 
 from bedrock_agentcore.memory.integrations.strands.config import AgentCoreMemoryConfig
 from bedrock_agentcore.memory.integrations.strands.session_manager import (
@@ -94,7 +93,9 @@ When creating bookings, generate a unique booking ID and provide it to the custo
             session_manager=session_manager,
             trace_attributes={"user.id": user_id, "session.id": session_id},
         )
-        logger.info("[AGENT] Agent created successfully with Gateway tools and KB retrieve")
+        logger.info(
+            "[AGENT] Agent created successfully with Gateway tools and KB retrieve"
+        )
         return agent
 
     except Exception as e:

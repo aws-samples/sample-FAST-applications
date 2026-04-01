@@ -21,7 +21,7 @@ jobs:
         uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c # v46
         with:
           files: |
-            **/*.py
+            samples/**/*.py
 
       - name: Set up Python
         if: steps.changed-files.outputs.any_changed == 'true'
@@ -37,22 +37,21 @@ jobs:
         if: steps.changed-files.outputs.any_changed == 'true'
         run: uv tool install ruff
 
-      - name: Run ruff check on changed files
+      - name: Run ruff per sample directory
         if: steps.changed-files.outputs.any_changed == 'true'
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
-          echo "Checking changed Python files:"
-          echo "${ALL_CHANGED_FILES}" | tr ' ' '\n'
-          uv tool run ruff check --output-format=github ${ALL_CHANGED_FILES}
+          # Discover which sample directories have changed Python files
+          SAMPLE_DIRS=$(echo "${ALL_CHANGED_FILES}" | tr ' ' '\n' | sed -n 's|\(samples/[^/]*\)/.*|\1|p' | sort -u)
 
-      - name: Run ruff format check on changed files
-        if: steps.changed-files.outputs.any_changed == 'true'
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: |
-          echo "Checking format of changed Python files:"
-          uv tool run ruff format --check ${ALL_CHANGED_FILES}
+          for sample_dir in $SAMPLE_DIRS; do
+            echo "=== Checking $sample_dir ==="
+            cd "$sample_dir"
+            uv tool run ruff check
+            uv tool run ruff format --check
+            cd "$GITHUB_WORKSPACE"
+          done
 
       - name: Skip message
         if: steps.changed-files.outputs.any_changed == 'false'
