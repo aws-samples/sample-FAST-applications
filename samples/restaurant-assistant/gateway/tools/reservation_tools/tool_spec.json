@@ -1,0 +1,84 @@
+[
+  {
+    "name": "get_booking_details",
+    "description": "Retrieve the details of an existing restaurant reservation using the booking ID and restaurant name.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "booking_id": {
+          "type": "string",
+          "description": "The unique identifier for the reservation"
+        },
+        "restaurant_name": {
+          "type": "string",
+          "description": "The name of the restaurant where the reservation was made"
+        }
+      },
+      "required": [
+        "booking_id",
+        "restaurant_name"
+      ]
+    }
+  },
+  {
+    "name": "create_booking",
+    "description": "Create a new restaurant reservation with the specified details.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "description": "Reservation date in YYYY-MM-DD format"
+        },
+        "hour": {
+          "type": "string",
+          "description": "Reservation time in HH:MM format (24-hour)"
+        },
+        "restaurant_name": {
+          "type": "string",
+          "description": "The name of the restaurant for the reservation"
+        },
+        "guest_name": {
+          "type": "string",
+          "description": "The name of the guest making the reservation"
+        },
+        "num_guests": {
+          "type": "integer",
+          "description": "The number of guests for the reservation"
+        },
+        "phone_number": {
+          "type": "string",
+          "description": "Contact phone number for the reservation (optional)"
+        }
+      },
+      "required": [
+        "date",
+        "hour",
+        "restaurant_name",
+        "guest_name",
+        "num_guests"
+      ]
+    }
+  },
+  {
+    "name": "delete_booking",
+    "description": "Cancel an existing restaurant reservation using the booking ID and restaurant name.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "booking_id": {
+          "type": "string",
+          "description": "The unique identifier for the reservation to cancel"
+        },
+        "restaurant_name": {
+          "type": "string",
+          "description": "The name of the restaurant where the reservation was made"
+        }
+      },
+      "required": [
+        "booking_id",
+        "restaurant_name"
+      ]
+    }
+  }
+]
