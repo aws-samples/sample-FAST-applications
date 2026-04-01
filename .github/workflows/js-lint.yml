@@ -1,0 +1,84 @@
+name: JavaScript/TypeScript Code Quality
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  js-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get changed JS/TS files
+        id: changed-files
+        uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c # v46
+        with:
+          files: |
+            samples/**/frontend/**/*.js
+            samples/**/frontend/**/*.ts
+            samples/**/frontend/**/*.jsx
+            samples/**/frontend/**/*.tsx
+            samples/**/frontend/**/*.css
+            samples/**/frontend/**/*.json
+            samples/**/frontend/**/*.mjs
+
+      - name: Set up Node.js
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Lint changed files per sample
+        if: steps.changed-files.outputs.any_changed == 'true'
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+          # Discover which sample frontends have changes
+          SAMPLE_DIRS=$(echo "${ALL_CHANGED_FILES}" | tr ' ' '\n' | sed -n 's|\(samples/[^/]*/frontend\)/.*|\1|p' | sort -u)
+
+          for frontend_dir in $SAMPLE_DIRS; do
+            echo "=== Linting $frontend_dir ==="
+            cd "$frontend_dir"
+            npm ci
+
+            # ESLint on .ts/.tsx/.js/.jsx files
+            ESLINT_FILES=""
+            for file in ${ALL_CHANGED_FILES}; do
+              if echo "$file" | grep -q "^${frontend_dir}/" && echo "$file" | grep -qE '\.(ts|tsx|js|jsx)$'; then
+                relative_file="${file#${frontend_dir}/}"
+                if [ -f "$relative_file" ]; then
+                  ESLINT_FILES="$ESLINT_FILES $relative_file"
+                fi
+              fi
+            done
+            if [ -n "$ESLINT_FILES" ]; then
+              npx eslint $ESLINT_FILES
+            fi
+
+            # Prettier on all changed files
+            PRETTIER_FILES=""
+            for file in ${ALL_CHANGED_FILES}; do
+              if echo "$file" | grep -q "^${frontend_dir}/"; then
+                relative_file="${file#${frontend_dir}/}"
+                if [ -f "$relative_file" ]; then
+                  PRETTIER_FILES="$PRETTIER_FILES $relative_file"
+                fi
+              fi
+            done
+            if [ -n "$PRETTIER_FILES" ]; then
+              npx prettier --check $PRETTIER_FILES
+            fi
+
+            cd "$GITHUB_WORKSPACE"
+          done
+
+      - name: Skip message
+        if: steps.changed-files.outputs.any_changed == 'false'
+        run: echo "No JavaScript/TypeScript files changed - skipping JS/TS linting"
