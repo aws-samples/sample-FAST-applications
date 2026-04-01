@@ -46,22 +46,11 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 ├── README.md              # This file
 ├── CONTRIBUTING.md        # Contribution guidelines
 └── samples/               # Sample applications
-    └── restaurant-assistant/
 ```
 
 ## Contributing
 
 Have you built something with FAST? We'd love to see it! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute your sample application.
-
-## Important Notes
-
-- **No sensitive data**: Samples should not contain any company-specific or sensitive data or information
-- **Security**: Follow the same security best practices established in the main FAST repository
-- **Documentation**: Each sample should include clear documentation about what it does and how it differs from base FAST
-
-## Security
-
-See [CONTRIBUTING](CONTRIBUTING.md#security) for more information.
 
 ## Support
 
