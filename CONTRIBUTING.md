@@ -92,6 +92,7 @@ Your sample's `README.md` should include:
 - **Prerequisites**: What users need before deploying
 - **Deployment**: Step-by-step deployment instructions
 - **Usage**: How to use the deployed application
+- **Screenshot**: Include a representative screenshot of the UI in your sample's `docs/img/` directory
 
 ### 2. Submit Your Contribution
 
@@ -110,6 +111,8 @@ Add your sample to the "Available Samples" section in the main README.md:
 **Built on FAST**: version
 **Key Differences from FAST**: What makes this sample unique
 **Use Case**: When someone might want to use this pattern
+
+![Sample UI](samples/your-sample-directory/docs/img/screenshot.png)
 ```
 
 #### Step 3: Create a Pull Request

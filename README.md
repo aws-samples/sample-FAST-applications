@@ -15,7 +15,13 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 
 ## Available Samples
 
-### [Restaurant Assistant](samples/restaurant-assistant/)
+| Sample | Description |
+|--------|-------------|
+| [Restaurant Assistant](#restaurant-assistant) | Knowledge base integration, reservation management, and customer-facing chat widget |
+
+<!-- Add new samples to the table above as they are added -->
+
+### Restaurant Assistant
 **Description**: A restaurant assistant application with knowledge base integration, reservation management, and a professional customer-facing interface.
 
 **Built on FAST**: v0.4.1
@@ -55,7 +61,7 @@ Have you built something with FAST? We'd love to see it! Please see [CONTRIBUTIN
 
 ## Security
 
-See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+See [CONTRIBUTING](CONTRIBUTING.md#security) for more information.
 
 ## Support
 
