@@ -146,9 +146,16 @@ This project has adopted the [Amazon Open Source Code of Conduct](https://aws.gi
 For more information see the [Code of Conduct FAQ](https://aws.github.io/code-of-conduct-faq) or contact
 opensource-codeofconduct@amazon.com with any additional questions or comments.
 
-## Security Issue Notifications
+## Security
 
-If you discover a potential security issue in this project we ask that you notify AWS/Amazon Security via our [vulnerability reporting page](http://aws.amazon.com/security/vulnerability-reporting/). Please do **not** create a public GitHub issue.
+> **⚠️ Important:** These samples are provided as proof-of-value demonstrations and are not intended as production-ready solutions. You must determine how the [AWS Shared Responsibility Model](https://aws.amazon.com/compliance/shared-responsibility-model/) applies to your specific use case and implement the appropriate controls to achieve your desired security outcomes. AWS offers a [broad set of security tools and configurations](https://docs.aws.amazon.com/security/) to help you secure your workloads.
+
+When contributing, please ensure your sample:
+- Follows the same security best practices established in the main [FAST repository](https://github.com/awslabs/fullstack-solution-template-for-agentcore)
+- Passes the automated [ASH (Automated Security Helper)](https://github.com/awslabs/automated-security-helper) security scans that run in CI/CD on every pull request
+- Does not contain any hardcoded credentials, secrets, or deployment-specific values (AWS account IDs, ARNs, etc.)
+
+If you discover a potential security issue in this project, we ask that you notify AWS/Amazon Security via our [vulnerability reporting page](http://aws.amazon.com/security/vulnerability-reporting/). Please do **not** create a public GitHub issue.
 
 ## Licensing
 

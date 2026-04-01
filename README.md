@@ -6,7 +6,7 @@ This repository contains sample applications built using the [Fullstack AgentCor
 
 ## Purpose
 
-While FAST provides a fully functional out-of-the-box chat application, it's designed to be customized for any use case that leverages AgentCore. These samples serve as:
+While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcore) provides a fully functional out-of-the-box chat application, it's designed to be customized for any use case that leverages AgentCore. These samples serve as:
 
 - **Reference implementations** for common patterns and use cases
 - **Starting points** for similar projects
@@ -17,8 +17,11 @@ While FAST provides a fully functional out-of-the-box chat application, it's des
 
 ### [Restaurant Assistant](samples/restaurant-assistant/)
 **Description**: A restaurant assistant application with knowledge base integration, reservation management, and a professional customer-facing interface.
+
 **Built on FAST**: v0.4.1
+
 **Key Differences from FAST**: Adds an s3-vector backed knowledge base, DynamoDB reservations table, custom reservation tools, restaurant-themed landing page with chat widget, and file upload capabilities
+
 **Use Case**: Building customer service assistants for hospitality businesses or any domain requiring knowledge base integration with transactional capabilities
 
 ![Restaurant Assistant UI](samples/restaurant-assistant/docs/img/restaurant-assistant-screenshot.png)
@@ -39,13 +42,6 @@ While FAST provides a fully functional out-of-the-box chat application, it's des
 └── samples/               # Sample applications
     └── restaurant-assistant/
 ```
-
-## Getting Started
-
-1. **Fork FAST**: Start by forking the base [FAST repository](https://github.com/awslabs/fullstack-solution-template-for-agentcore)
-2. **Browse samples**: Look through the available samples to find one similar to your use case
-3. **Apply sample patterns**: Use a sample as reference to customize your FAST fork for your specific needs
-4. **Deploy and test**: Follow the sample's README for deployment instructions
 
 ## Contributing
 
