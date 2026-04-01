@@ -1,6 +1,6 @@
 # Restaurant Assistant Sample
 
-Built on the [Fullstack AgentCore Solution Template (FAST)](https://github.com/awslabs/fullstack-solution-template-for-agentcore) v0.4.0.
+Built on the [Fullstack AgentCore Solution Template (FAST)](https://github.com/awslabs/fullstack-solution-template-for-agentcore) v0.4.1.
 
 This sample demonstrates how to transform the FAST baseline chat application into a restaurant assistant with knowledge base integration, reservation management, and a professional customer-facing interface.
 

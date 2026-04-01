@@ -2,6 +2,8 @@
 
 This repository contains sample applications built using the [Fullstack AgentCore Solution Template (FAST)](https://github.com/awslabs/fullstack-solution-template-for-agentcore) as a starting point. Each sample demonstrates how to customize FAST for different use cases while leveraging AWS AgentCore.
 
+> **⚠️ Important:** These samples are provided as proof-of-value demonstrations and are not intended as production-ready solutions. You must determine how the [AWS Shared Responsibility Model](https://aws.amazon.com/compliance/shared-responsibility-model/) applies to your specific use case and implement the appropriate controls to achieve your desired security outcomes. AWS offers a [broad set of security tools and configurations](https://docs.aws.amazon.com/security/) to help you secure your workloads.
+
 ## Purpose
 
 While FAST provides a fully functional out-of-the-box chat application, it's designed to be customized for any use case that leverages AgentCore. These samples serve as:
@@ -15,8 +17,8 @@ While FAST provides a fully functional out-of-the-box chat application, it's des
 
 ### [Restaurant Assistant](samples/restaurant-assistant/)
 **Description**: A restaurant assistant application with knowledge base integration, reservation management, and a professional customer-facing interface.
-**Built on FAST**: v0.4.0
-**Key Differences from FAST**: Adds OpenSearch Serverless knowledge base, DynamoDB reservations table, custom reservation tools, restaurant-themed landing page with chat widget, and file upload capabilities
+**Built on FAST**: v0.4.1
+**Key Differences from FAST**: Adds an s3-vector backed knowledge base, DynamoDB reservations table, custom reservation tools, restaurant-themed landing page with chat widget, and file upload capabilities
 **Use Case**: Building customer service assistants for hospitality businesses or any domain requiring knowledge base integration with transactional capabilities
 
 ![Restaurant Assistant UI](samples/restaurant-assistant/docs/img/restaurant-assistant-screenshot.png)
