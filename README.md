@@ -8,9 +8,8 @@ This repository contains sample applications built using the [Fullstack AgentCor
 
 While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcore) provides a fully functional out-of-the-box chat application, it's designed to be customized for any use case that leverages AgentCore. These samples serve as:
 
-- **Reference implementations** for common patterns and use cases
 - **Starting points** for similar projects
-- **Best practice examples** of how to extend FAST
+- **A diverse set of examples** of how others have extended FAST for a variety of use cases
 - **Learning resources** for engineers
 
 ## Available Samples
@@ -39,14 +38,6 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 **Key Differences from FAST**: What makes this sample unique
 **Use Case**: When you might want to use this pattern
 -->
-
-## Repository Structure
-
-```
-├── README.md              # This file
-├── CONTRIBUTING.md        # Contribution guidelines
-└── samples/               # Sample applications
-```
 
 ## Contributing
 
