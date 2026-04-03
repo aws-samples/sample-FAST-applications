@@ -1,48 +1,60 @@
 # Contributing to FAST Samples
 
-Thank you for your interest in contributing to our project. We greatly value feedback and contributions from our community.
+Thank you for your interest in contributing! Whether you're an AWS employee or an external community member, we welcome sample applications that demonstrate how to build on [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcore).
 
-Please read through this document before submitting any issues or pull requests to ensure we have all the necessary
-information to effectively respond to your bug report or contribution.
+Please read through this document before submitting any issues or pull requests to ensure we have all the necessary information to effectively respond to your bug report or contribution.
 
-## Contributing a Sample Application
+## Before You Start
 
-Have you built something with FAST? We'd love to see it! This section will help you prepare and submit your FAST-based project as a sample for others to learn from.
+1. **Check for duplicates**: Make sure a similar sample doesn't already exist in this repository.
+2. **Verify your sample is built on FAST**: Samples must use [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcore) as their starting point.
+3. **Plan for finality**: It's difficult to make significant changes to a sample once it's published. Make sure you've incorporated all the features you want before submitting.
 
-### Before You Contribute
+## Preparing Your Sample
 
-#### Prerequisites
-- Your sample application should be built starting from [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcore)
-- The application should be functional and deployable
-- You should be willing to be listed as a contact person for questions about your sample
+### Content Requirements
 
-#### Content Guidelines
-- **No proprietary data**: Remove all company-specific data, credentials, and sensitive information
-- **Anonymize references**: Avoid company or organization names when possible; use generic names or anonymize
-- **Security**: Ensure your sample follows the same security best practices as FAST
-- **Documentation**: Your sample should be well-documented and easy to understand
+Your sample's codebase **must** include:
+- A well-written top-level `README.md` (see [Required Documentation](#required-documentation) below)
+- An accurate architecture diagram (modify the original FAST draw.io diagram to reflect your sample's structure)
+- A screenshot or short GIF of the UI in `docs/img/`
 
-### 1. Prepare Your Sample
+Your sample's codebase **must not** contain:
+- Customer names or customer data
+- Proprietary datasets or models
+- Hardcoded credentials, secrets, or deployment-specific values (AWS account IDs, ARNs, Cognito pool IDs, Amplify domains, API Gateway URLs, etc.)
+- Company or organization names — use generic names or anonymize
 
-#### Directory Structure
-Create your sample in the following structure:
+After copying your project, search for files containing deployment-specific values (e.g. `frontend/public/aws-exports.json`) and replace them with generic placeholders like `<account-id>`, `<region>`, `<your-amplify-domain>`, etc.
+
+### Directory Structure
+
 ```
 samples/your-sample-name/
-├── README.md              # Sample-specific documentation including an architecture diagram
+├── README.md              # Sample-specific documentation
+├── docs/
+│   └── img/               # Screenshots and architecture diagrams
 └── [your application files and directories]
 ```
 
-#### Copying Your Sample
-To copy your FAST-based application to the samples repository, use rsync to exclude build artifacts and git history:
+### Required Documentation
+
+Your sample's `README.md` should include:
+- **Overview**: What your sample does and its use case
+- **Key Differences**: How it differs from base FAST
+- **Architecture**: Any architectural changes or additions
+- **Prerequisites**: What users need before deploying (outside of the original core FAST requirements)
+- **Deployment**: Step-by-step deployment instructions (if different from the core FAST deployment process)
+- **Usage**: How to use the deployed application (e.g. sample queries or otherwise)
+
+### Copying Your Sample
+
+Use rsync to copy your FAST-based application, excluding build artifacts and git history:
 
 ```bash
-# Navigate to the samples repository
 cd /path/to/sample-FAST-applications
-
-# Create your sample directory
 mkdir -p samples/your-sample-name
 
-# Copy files excluding build artifacts, git history, and cache files
 rsync -av \
   --exclude='.git' \
   --exclude='node_modules' \
@@ -54,29 +66,24 @@ rsync -av \
   --exclude='.ruff_cache' \
   --exclude='.venv' \
   --exclude='.agentcore.json' \
-  --exclude='.gitlab-ci.yml' \
   /path/to/your-FAST-project/ samples/your-sample-name/
 ```
 
-This ensures only source code and documentation are copied, keeping the repository clean and focused.
+> **Tip**: If your sample is CDK-based, consider removing the `infra-terraform` directory (or vice versa). This improves clarity for users and reduces security scan findings.
 
-After copying, check for any files containing deployment-specific values (e.g. `frontend/public/aws-exports.json`) and replace real AWS account IDs, Cognito pool IDs, ARNs, Amplify domains, and API Gateway URLs with generic placeholders like `<account-id>`, `<region>`, `<your-amplify-domain>`, etc.
+### Passing CI Checks
 
-#### Passing CI Lint Checks
-
-The CI pipeline runs Python linting (ruff) and JS/TS linting (ESLint + Prettier) on changed samples. To catch issues before pushing, run from your sample directory:
+The CI pipeline runs linting and security scans on every pull request. To catch issues before pushing:
 
 ```bash
 cd samples/your-sample-name
 
-# Install ruff if you don't have it (also listed in requirements-dev.txt)
+# Python lint + format check
 pip install ruff
-
-# Python lint + format check (or use: make lint-cicd)
 ruff check
 ruff format --check
 
-# Auto-fix Python issues (or use: make lint)
+# Auto-fix Python issues
 ruff check --fix
 ruff format
 
@@ -84,26 +91,27 @@ ruff format
 cd frontend && npm ci && npx eslint src/ && npx prettier --check "src/**/*.{ts,tsx,js,jsx,css,json}"
 ```
 
-#### Required Documentation
-Your sample's `README.md` should include:
-- **Overview**: What your sample does and its use case
-- **Key Differences**: How it differs from base FAST
-- **Architecture**: Any architectural changes or additions
-- **Prerequisites**: What users need before deploying
-- **Deployment**: Step-by-step deployment instructions
-- **Usage**: How to use the deployed application
-- **Screenshot**: Include a representative screenshot of the UI in your sample's `docs/img/` directory
+### Naming Conventions
 
-### 2. Submit Your Contribution
+Use descriptive, kebab-case names that indicate the key technology or use case:
+- `langchain-async-research-agent`
+- `multi-modal-document-analysis`
+- `real-time-streaming-chat`
 
-#### Step 1: Add Your Sample
+## Submitting Your Contribution
+### Steps to Contribute
 1. Fork this repository
-2. Create a new directory under `samples/` with a descriptive name (use kebab-case)
+2. Create a new directory under `samples/` with a descriptive name
 3. Add your application code and documentation
-4. Test that your deployment instructions work
+4. Test that your deployment instructions work from a clean environment
+5. Thoroughly check that you are abiding by all guidance in this CONTRIBUTING.md file
+6. Push to your fork and open a pull request
 
-#### Step 2: Update the Main README
-Add your sample to the "Available Samples" section in the main README.md:
+### What Your Pull Request Should Contain
+
+Your PR should:
+- Add your sample as a new directory under `samples/` — avoid modifying other samples
+- Update the "Available Samples" table in the root `README.md` with your sample's entry:
 
 ```markdown
 ### [Your Sample Name](samples/your-sample-directory/)
@@ -115,33 +123,27 @@ Add your sample to the "Available Samples" section in the main README.md:
 ![Sample UI](samples/your-sample-directory/docs/img/screenshot.png)
 ```
 
-#### Step 3: Create a Pull Request
-1. Commit your changes with clear commit messages
-2. Push to your fork
-3. Create a pull request with:
-   - Clear title describing your sample
-   - Description explaining what your sample does
-   - Any special notes for reviewers
+- Include clear commit messages and a PR description explaining what your sample does
 
-### 3. Review Process
+### Review Process
 
 Your contribution will be reviewed for:
 - **Completeness**: All required documentation is present
-- **Security**: No sensitive data or security issues
+- **Security**: No sensitive data, credentials, or security issues; automated [ASH](https://github.com/awslabs/automated-security-helper) security scans must pass
 - **Quality**: Code and documentation meet basic quality standards
-- **Functionality**: Deployment instructions work as documented
+- **Functionality**: Deployment instructions are clear and complete
 
-### Sample Naming Conventions
+## Reporting Bugs / Opening Issues
 
-Use descriptive, kebab-case names that indicate the key technology or use case:
-- `langchain-async-research-agent`
-- `multi-modal-document-analysis`
-- `real-time-streaming-chat`
+When filing an issue, please include:
+- Which sample the issue relates to
+- Steps to reproduce the problem
+- Expected vs. actual behavior
+- Any relevant logs or error messages
 
-### Contributing Back to FAST
+## Contributing Back to FAST
 
-If your sample reveals improvements that could benefit the base FAST repository, consider submitting a pull request to the main [FAST repository](https://github.com/awslabs/fullstack-solution-template-for-agentcore) with your insights and suggested changes.
-
+If your sample reveals improvements that could benefit the base FAST template, consider submitting a pull request to the main [FAST repository](https://github.com/awslabs/fullstack-solution-template-for-agentcore).
 
 ## Code of Conduct
 
@@ -150,13 +152,6 @@ For more information see the [Code of Conduct FAQ](https://aws.github.io/code-of
 opensource-codeofconduct@amazon.com with any additional questions or comments.
 
 ## Security
-
-> **⚠️ Important:** These samples are provided as proof-of-value demonstrations and are not intended as production-ready solutions. You must determine how the [AWS Shared Responsibility Model](https://aws.amazon.com/compliance/shared-responsibility-model/) applies to your specific use case and implement the appropriate controls to achieve your desired security outcomes. AWS offers a [broad set of security tools and configurations](https://docs.aws.amazon.com/security/) to help you secure your workloads.
-
-When contributing, please ensure your sample:
-- Follows the same security best practices established in the main [FAST repository](https://github.com/awslabs/fullstack-solution-template-for-agentcore)
-- Passes the automated [ASH (Automated Security Helper)](https://github.com/awslabs/automated-security-helper) security scans that run in CI/CD on every pull request
-- Does not contain any hardcoded credentials, secrets, or deployment-specific values (AWS account IDs, ARNs, etc.)
 
 If you discover a potential security issue in this project, we ask that you notify AWS/Amazon Security via our [vulnerability reporting page](http://aws.amazon.com/security/vulnerability-reporting/). Please do **not** create a public GitHub issue.
 

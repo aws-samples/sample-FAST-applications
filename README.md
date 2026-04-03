@@ -2,7 +2,7 @@
 
 This repository contains sample applications built using the [Fullstack AgentCore Solution Template (FAST)](https://github.com/awslabs/fullstack-solution-template-for-agentcore) as a starting point. Each sample demonstrates how to customize FAST for different use cases while leveraging AWS AgentCore.
 
-> **⚠️ Important:** These samples are provided as proof-of-value demonstrations and are not intended as production-ready solutions. You must determine how the [AWS Shared Responsibility Model](https://aws.amazon.com/compliance/shared-responsibility-model/) applies to your specific use case and implement the appropriate controls to achieve your desired security outcomes. AWS offers a [broad set of security tools and configurations](https://docs.aws.amazon.com/security/) to help you secure your workloads.
+> **⚠️ Important:** These samples are **not production-ready**. They pass automated security scanning at the time of contribution but are not guaranteed to receive ongoing security patches or dependency updates. You must thoroughly review any sample code before deploying to production. See [SECURITY.md](SECURITY.md) for details.
 
 ## Purpose
 
