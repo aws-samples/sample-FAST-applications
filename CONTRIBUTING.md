@@ -69,7 +69,7 @@ rsync -av \
   /path/to/your-FAST-project/ samples/your-sample-name/
 ```
 
-> **Tip**: If your sample is CDK-based, consider removing the `infra-terraform` directory (or vice versa). This improves clarity for users and reduces security scan findings.
+> **Important**: If your sample only supports one IaC option (CDK or Terraform), remove the unsupported one. This improves clarity for users and reduces security scan findings.
 
 ### Passing CI Checks
 
@@ -90,6 +90,10 @@ ruff format
 # JS/TS lint + format check
 cd frontend && npm ci && npx eslint src/ && npx prettier --check "src/**/*.{ts,tsx,js,jsx,css,json}"
 ```
+
+### Preserving the CDK Tracking Suffix
+
+FAST includes a tracking suffix (e.g. `(uksb-v6dos0t5g8)`) in the CDK stack description in `infra-cdk/lib/fast-main-stack.ts`. This is used to track sample deployments. Please preserve this suffix in your sample — do not remove or modify it.
 
 ### Naming Conventions
 
