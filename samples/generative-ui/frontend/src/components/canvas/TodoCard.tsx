@@ -1,16 +1,16 @@
-import { useState, useRef, useEffect } from "react";
-import type { Todo } from "./types";
+import { useState, useRef, useEffect } from "react"
+import type { Todo } from "./types"
 
 interface TodoCardProps {
-  todo: Todo;
-  onToggleStatus: (todo: Todo) => void;
-  onDelete: (todo: Todo) => void;
-  onUpdateTitle: (todoId: string, title: string) => void;
-  onUpdateDescription: (todoId: string, description: string) => void;
-  onUpdateEmoji: (todoId: string, emoji: string) => void;
+  todo: Todo
+  onToggleStatus: (todo: Todo) => void
+  onDelete: (todo: Todo) => void
+  onUpdateTitle: (todoId: string, title: string) => void
+  onUpdateDescription: (todoId: string, description: string) => void
+  onUpdateEmoji: (todoId: string, emoji: string) => void
 }
 
-const EMOJI_OPTIONS = ["✅", "🔥", "🎯", "💡", "🚀"];
+const EMOJI_OPTIONS = ["✅", "🔥", "🎯", "💡", "🚀"]
 
 export function TodoCard({
   todo,
@@ -20,47 +20,42 @@ export function TodoCard({
   onUpdateDescription,
   onUpdateEmoji,
 }: TodoCardProps) {
-  const [editingField, setEditingField] = useState<
-    "title" | "description" | null
-  >(null);
-  const [editValue, setEditValue] = useState("");
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [editingField, setEditingField] = useState<"title" | "description" | null>(null)
+  const [editValue, setEditValue] = useState("")
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  const isCompleted = todo.status === "completed";
+  const isCompleted = todo.status === "completed"
   const truncatedDescription =
-    todo.description.length > 120
-      ? todo.description.slice(0, 120) + "..."
-      : todo.description;
+    todo.description.length > 120 ? todo.description.slice(0, 120) + "..." : todo.description
 
   const startEdit = (field: "title" | "description") => {
-    setEditingField(field);
-    setEditValue(field === "title" ? todo.title : todo.description);
-  };
+    setEditingField(field)
+    setEditValue(field === "title" ? todo.title : todo.description)
+  }
 
   const saveEdit = (field: "title" | "description") => {
     if (!editValue.trim()) {
       // Don't save empty value — keep the editor open
-      return;
+      return
     }
-    if (field === "title") onUpdateTitle(todo.id, editValue.trim());
-    else onUpdateDescription(todo.id, editValue.trim());
-    setEditingField(null);
-    setEditValue("");
-  };
+    if (field === "title") onUpdateTitle(todo.id, editValue.trim())
+    else onUpdateDescription(todo.id, editValue.trim())
+    setEditingField(null)
+    setEditValue("")
+  }
 
   const cancelEdit = () => {
-    setEditingField(null);
-    setEditValue("");
-  };
+    setEditingField(null)
+    setEditValue("")
+  }
 
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height =
-        textareaRef.current.scrollHeight + "px";
+      textareaRef.current.style.height = "auto"
+      textareaRef.current.style.height = textareaRef.current.scrollHeight + "px"
     }
-  }, [editValue]);
+  }, [editValue])
 
   return (
     <div
@@ -105,12 +100,12 @@ export function TodoCard({
         </button>
         {showEmojiPicker && (
           <div className="absolute top-0 left-full ml-2 z-10 flex gap-1 p-1.5 rounded-full bg-white border border-neutral-300 shadow-lg dark:bg-neutral-800 dark:border-neutral-600">
-            {EMOJI_OPTIONS.map((emoji) => (
+            {EMOJI_OPTIONS.map(emoji => (
               <button
                 key={emoji}
                 onClick={() => {
-                  onUpdateEmoji(todo.id, emoji);
-                  setShowEmojiPicker(false);
+                  onUpdateEmoji(todo.id, emoji)
+                  setShowEmojiPicker(false)
                 }}
                 className="text-lg w-8 h-8 flex items-center justify-center rounded-full cursor-pointer transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-700"
               >
@@ -166,11 +161,11 @@ export function TodoCard({
             <input
               type="text"
               value={editValue}
-              onChange={(e) => setEditValue(e.target.value)}
+              onChange={e => setEditValue(e.target.value)}
               onBlur={() => saveEdit("title")}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") saveEdit("title");
-                if (e.key === "Escape") cancelEdit();
+              onKeyDown={e => {
+                if (e.key === "Enter") saveEdit("title")
+                if (e.key === "Escape") cancelEdit()
               }}
               className="w-full text-[16px] font-semibold focus:outline-none bg-transparent text-neutral-900 dark:text-neutral-100 border-b-2 border-neutral-900 dark:border-neutral-100 pb-[2px]"
               autoFocus
@@ -193,10 +188,10 @@ export function TodoCard({
             <textarea
               ref={textareaRef}
               value={editValue}
-              onChange={(e) => setEditValue(e.target.value)}
+              onChange={e => setEditValue(e.target.value)}
               onBlur={() => saveEdit("description")}
-              onKeyDown={(e) => {
-                if (e.key === "Escape") cancelEdit();
+              onKeyDown={e => {
+                if (e.key === "Escape") cancelEdit()
               }}
               className="w-full mt-1.5 text-[14px] leading-relaxed focus:outline-none resize-none bg-transparent text-neutral-500 dark:text-neutral-400 border-b-2 border-neutral-900 dark:border-neutral-100 pb-[2px]"
               rows={1}
@@ -218,5 +213,5 @@ export function TodoCard({
         </div>
       </div>
     </div>
-  );
+  )
 }

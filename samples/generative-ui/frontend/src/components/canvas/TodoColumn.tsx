@@ -1,18 +1,18 @@
-import type { Todo } from "./types";
-import { TodoCard } from "./TodoCard";
+import type { Todo } from "./types"
+import { TodoCard } from "./TodoCard"
 
 interface TodoColumnProps {
-  title: string;
-  todos: Todo[];
-  emptyMessage: string;
-  showAddButton?: boolean;
-  onAddTodo?: () => void;
-  onToggleStatus: (todo: Todo) => void;
-  onDelete: (todo: Todo) => void;
-  onUpdateTitle: (todoId: string, title: string) => void;
-  onUpdateDescription: (todoId: string, description: string) => void;
-  onUpdateEmoji: (todoId: string, emoji: string) => void;
-  isAgentRunning: boolean;
+  title: string
+  todos: Todo[]
+  emptyMessage: string
+  showAddButton?: boolean
+  onAddTodo?: () => void
+  onToggleStatus: (todo: Todo) => void
+  onDelete: (todo: Todo) => void
+  onUpdateTitle: (todoId: string, title: string) => void
+  onUpdateDescription: (todoId: string, description: string) => void
+  onUpdateEmoji: (todoId: string, emoji: string) => void
+  isAgentRunning: boolean
 }
 
 export function TodoColumn({
@@ -68,7 +68,7 @@ export function TodoColumn({
             {emptyMessage}
           </div>
         ) : (
-          todos.map((todo) => (
+          todos.map(todo => (
             <TodoCard
               key={todo.id}
               todo={todo}
@@ -82,5 +82,5 @@ export function TodoColumn({
         )}
       </div>
     </section>
-  );
+  )
 }

@@ -51,7 +51,7 @@ agent-strands = [
 ]
 
 [tool.ruff]
-line-length = 88
+line-length = 130
 target-version = "py310"
 
 [tool.ruff.lint]
@@ -59,4 +59,5 @@ select = ["E", "F", "W", "I", "N", "UP", "S", "B", "A", "C4", "T20"]
 ignore = ["S101", "S603", "S607"]
 
 [tool.ruff.lint.per-file-ignores]
-"scripts/*.py" = ["E402"]
+"scripts/*.py" = ["E402", "T201"]
+"docker/*.py" = ["T201"]

@@ -1,23 +1,20 @@
 // frontend/src/hooks/useExampleSuggestions.ts
-import { useConfigureSuggestions } from "@copilotkit/react-core/v2";
+import { useConfigureSuggestions } from "@copilotkit/react-core/v2"
 
 export const useExampleSuggestions = () => {
   useConfigureSuggestions({
     suggestions: [
       {
         title: "Pie chart (Controlled Generative UI)",
-        message:
-          "Please show me the distribution of our revenue by category in a pie chart.",
+        message: "Please show me the distribution of our revenue by category in a pie chart.",
       },
       {
         title: "Bar chart (Controlled Generative UI)",
-        message:
-          "Please show me the distribution of our expenses by category in a bar chart.",
+        message: "Please show me the distribution of our expenses by category in a bar chart.",
       },
       {
         title: "MCP apps (Open Generative UI)",
-        message:
-          "Please create a simple network diagram of a router and two switches.",
+        message: "Please create a simple network diagram of a router and two switches.",
       },
       {
         title: "Change theme (Frontend Tools)",
@@ -34,5 +31,5 @@ export const useExampleSuggestions = () => {
       },
     ],
     available: "always",
-  });
-};
+  })
+}

@@ -2,9 +2,11 @@
 Resolves STACK_NAME and MEMORY_ID from config.yaml + CloudFormation
 and writes them to /env/agent.env for the agent container.
 """
-import boto3
+
 import os
 import re
+
+import boto3
 import yaml
 
 with open("/config.yaml") as f:
