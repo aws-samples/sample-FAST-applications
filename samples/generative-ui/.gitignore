@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.uv/
+
+# Node
+node_modules/
+dist/
+.vite/
+build/
+
+# CDK
+cdk.out*/
+infra-cdk/cdk.out*/
+
+# AWS
+aws-exports.json
+frontend/public/aws-exports.json
+*.zip
+
+# Local config (contains personal email/stack name — use config.yaml.example as template)
+config.yaml
+
+# Local dev credentials and generated env
+docker/.env
+# docker/.env holds creds + stack values — never commit it
+
+# Terraform
+infra-terraform/.terraform/
+infra-terraform/*.tfstate
+infra-terraform/*.tfstate.backup
+infra-terraform/.terraform.lock.hcl
+infra-terraform/terraform.tfvars
