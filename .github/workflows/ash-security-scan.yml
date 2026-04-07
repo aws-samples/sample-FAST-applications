@@ -163,16 +163,23 @@ jobs:
               echo "- Scanner status is determined by comparing actionable findings to the threshold" >> "$SUMMARY_FILE"
               echo "" >> "$SUMMARY_FILE"
 
-              # Convert terminal table to markdown table format
-              echo "| Scanner | S | C | H | M | L | I | Time | Action | Result | Thresh |" >> "$SUMMARY_FILE"
-              echo "|---------|---|---|---|---|---|---|------|--------|--------|--------|" >> "$SUMMARY_FILE"
-              # Extract table data, strip ANSI codes, and convert to markdown
+              # Extract table from terminal output, strip ANSI codes, convert box-drawing to markdown
               sed -n "${TABLE_START},${TABLE_END}p" /tmp/ash-output.log | \
               sed 's/\x1b\[[0-9;]*m//g' | \
               grep "^│" | \
               sed 's/│/|/g' | \
               sed 's/^ *|/|/' | \
-              sed 's/| *$/|/' >> "$SUMMARY_FILE"
+              sed 's/| *$/|/' > /tmp/ash-table-rows.txt
+
+              # First row is the header from ASH terminal output — use it as the markdown header
+              head -1 /tmp/ash-table-rows.txt >> "$SUMMARY_FILE"
+              # Build separator from the header column count
+              COL_COUNT=$(head -1 /tmp/ash-table-rows.txt | tr -cd '|' | wc -c)
+              SEP="|"
+              for i in $(seq 2 "$COL_COUNT"); do SEP="${SEP}---|"; done
+              echo "$SEP" >> "$SUMMARY_FILE"
+              # Remaining rows are scanner data
+              tail -n +2 /tmp/ash-table-rows.txt >> "$SUMMARY_FILE"
               echo "" >> "$SUMMARY_FILE"
 
               # Add detailed findings
