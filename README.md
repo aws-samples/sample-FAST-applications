@@ -17,6 +17,7 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 | Sample | Description |
 |--------|-------------|
 | [Restaurant Assistant](#restaurant-assistant) | Knowledge base integration, reservation management, and customer-facing chat widget |
+| [CopilotKit Generative UI](#copilotkit-generative-ui) | Generative UI, shared state, and human-in-the-loop interactions via CopilotKit |
 
 <!-- Add new samples to the table above as they are added -->
 
@@ -30,6 +31,15 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 **Use Case**: Building customer service assistants for hospitality businesses or any domain requiring knowledge base integration with transactional capabilities
 
 ![Restaurant Assistant UI](samples/restaurant-assistant/docs/img/restaurant-assistant-screenshot.png)
+
+### CopilotKit Generative UI
+**Description**: Adds CopilotKit as the frontend framework on top of FAST, enabling generative UI (inline charts and components rendered from tool calls), bidirectional shared state between the agent and UI, and human-in-the-loop interactions.
+
+**Built on FAST**: v0.4.1
+
+**Key Differences from FAST**: Replaces the baseline frontend with CopilotKit, adds a CopilotKit Runtime Lambda as a server-side bridge to AgentCore, and includes both LangGraph and Strands agent patterns with CopilotKit middleware.
+
+**Use Case**: Building agent-native applications where the AI drives the UI — not just chat — including dashboards, collaborative canvases, and interactive workflows.
 
 <!-- Template for new samples:
 ### [Sample Name](samples/sample-directory-name/)
