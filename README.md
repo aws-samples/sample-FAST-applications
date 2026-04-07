@@ -17,7 +17,7 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 | Sample | Description |
 |--------|-------------|
 | [Restaurant Assistant](#restaurant-assistant) | Knowledge base integration, reservation management, and customer-facing chat widget |
-| [Generative UI](#generative-ui) | Generative UI, shared state, and human-in-the-loop interactions via CopilotKit |
+| [CopilotKit Generative UI](#copilotkit-generative-ui) | Generative UI, shared state, and human-in-the-loop interactions via CopilotKit |
 
 <!-- Add new samples to the table above as they are added -->
 
@@ -32,7 +32,7 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 
 ![Restaurant Assistant UI](samples/restaurant-assistant/docs/img/restaurant-assistant-screenshot.png)
 
-### Generative UI
+### CopilotKit Generative UI
 **Description**: Adds CopilotKit as the frontend framework on top of FAST, enabling generative UI (inline charts and components rendered from tool calls), bidirectional shared state between the agent and UI, and human-in-the-loop interactions.
 
 **Built on FAST**: v0.4.1
