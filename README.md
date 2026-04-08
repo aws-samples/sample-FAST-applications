@@ -41,6 +41,8 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 
 **Use Case**: Building agent-native applications where the AI drives the UI — not just chat — including dashboards, collaborative canvases, and interactive workflows.
 
+![CopilotKit Generative UI](samples/copilotkit-generative-ui/docs/img/generative-ui-screenshot2.png)
+
 <!-- Template for new samples:
 ### [Sample Name](samples/sample-directory-name/)
 **Description**: Brief description of what this sample demonstrates
