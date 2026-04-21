@@ -1,80 +1,95 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState } from "react"
-import { ChatHeader } from "./ChatHeader"
-import { ChatInput } from "./ChatInput"
-import { ChatMessages } from "./ChatMessages"
-import { Message, CouncilStage1Response, CouncilStage2Ranking, CouncilMetadata, CouncilStage3Result } from "./types"
+import { useEffect, useRef, useState } from "react";
+import { ChatHeader } from "./ChatHeader";
+import { ChatInput } from "./ChatInput";
+import { ChatMessages } from "./ChatMessages";
+import {
+  Message,
+  CouncilStage1Response,
+  CouncilStage2Ranking,
+  CouncilMetadata,
+  CouncilStage3Result,
+} from "./types";
 
-import { useGlobal } from "@/app/context/GlobalContext"
-import { invokeAgentCore, generateSessionId, setAgentConfig } from "@/services/agentCoreService"
-import { submitFeedback } from "@/services/feedbackService"
-import { useAuth } from "react-oidc-context"
+import { useGlobal } from "@/app/context/GlobalContext";
+import {
+  invokeAgentCore,
+  generateSessionId,
+  setAgentConfig,
+} from "@/services/agentCoreService";
+import { submitFeedback } from "@/services/feedbackService";
+import { useAuth } from "react-oidc-context";
 
 export default function ChatInterface() {
   // State for chat messages and user input
-  const [messages, setMessages] = useState<Message[]>([])
-  const [input, setInput] = useState("")
-  const [sessionId] = useState(() => generateSessionId())
-  const [error, setError] = useState<string | null>(null)
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
+  const [sessionId] = useState(() => generateSessionId());
+  const [error, setError] = useState<string | null>(null);
 
-  const { isLoading, setIsLoading } = useGlobal()
-  const auth = useAuth()
+  const { isLoading, setIsLoading } = useGlobal();
+  const auth = useAuth();
 
   // Ref for message container to enable auto-scrolling
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Load agent configuration on mount
   useEffect(() => {
     async function loadConfig() {
       try {
-        const response = await fetch("/aws-exports.json")
+        const response = await fetch("/aws-exports.json");
         if (!response.ok) {
-          throw new Error("Failed to load configuration")
+          throw new Error("Failed to load configuration");
         }
-        const config = await response.json()
+        const config = await response.json();
 
         if (!config.agentRuntimeArn) {
-          throw new Error("Agent Runtime ARN not found in configuration")
+          throw new Error("Agent Runtime ARN not found in configuration");
         }
 
-        await setAgentConfig(config.agentRuntimeArn, config.awsRegion || "us-east-1", config.agentPattern)
+        await setAgentConfig(
+          config.agentRuntimeArn,
+          config.awsRegion || "us-east-1",
+          config.agentPattern,
+        );
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : "Unknown error"
-        setError(`Configuration error: ${errorMessage}`)
-        console.error("Failed to load agent configuration:", err)
+        const errorMessage =
+          err instanceof Error ? err.message : "Unknown error";
+        setError(`Configuration error: ${errorMessage}`);
+        console.error("Failed to load agent configuration:", err);
       }
     }
 
-    loadConfig()
-  }, [])
+    loadConfig();
+  }, []);
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
-    scrollToBottom()
-  }, [messages])
+    scrollToBottom();
+  }, [messages]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   // Send message to AgentCore backend with streaming support
   const sendMessage = async (userMessage: string) => {
-    if (!userMessage.trim()) return
+    if (!userMessage.trim()) return;
 
     // Clear any previous errors
-    setError(null)
+    setError(null);
 
     // Add user message to chat
     const newUserMessage: Message = {
       role: "user",
       content: userMessage,
       timestamp: new Date().toISOString(),
-    }
+    };
 
-    setMessages((prev) => [...prev, newUserMessage])
-    setInput("")
-    setIsLoading(true)
+    setMessages((prev) => [...prev, newUserMessage]);
+    setInput("");
+    setIsLoading(true);
 
     // Create placeholder for assistant response
     const assistantResponse: Message = {
@@ -82,17 +97,17 @@ export default function ChatInterface() {
       content: "",
       timestamp: new Date().toISOString(),
       councilData: {}, // Initialize empty council data
-    }
+    };
 
-    setMessages((prev) => [...prev, assistantResponse])
+    setMessages((prev) => [...prev, assistantResponse]);
 
     try {
       // Get auth tokens from react-oidc-context
-      const accessToken = auth.user?.access_token
-      const userId = auth.user?.profile?.sub
+      const accessToken = auth.user?.access_token;
+      const userId = auth.user?.profile?.sub;
 
       if (!accessToken || !userId) {
-        throw new Error("Authentication required. Please log in again.")
+        throw new Error("Authentication required. Please log in again.");
       }
 
       // Invoke AgentCore with streaming
@@ -102,97 +117,108 @@ export default function ChatInterface() {
         (update: string | Record<string, unknown>) => {
           // Update the last message (assistant response) with streamed content
           setMessages((prev) => {
-            const updated = [...prev]
-            const lastMessage = updated[updated.length - 1]
-            
+            const updated = [...prev];
+            const lastMessage = updated[updated.length - 1];
+
             // Handle council-specific updates
-            if (typeof update === 'object' && update.type) {
+            if (typeof update === "object" && update.type) {
               // Council event update
-              const councilData = lastMessage.councilData || {}
-              
+              const councilData = lastMessage.councilData || {};
+
               switch (update.type) {
-                case 'status':
-                  councilData.currentStage = update.stage as number | undefined
-                  councilData.statusMessage = update.message as string | undefined
-                  break
-                case 'stage1':
-                  councilData.stage1 = update.data as CouncilStage1Response[] | undefined
-                  councilData.statusMessage = undefined
-                  break
-                case 'stage2':
-                  councilData.stage2 = update.data as CouncilStage2Ranking[] | undefined
-                  councilData.stage2_metadata = update.metadata as CouncilMetadata | undefined
-                  councilData.statusMessage = undefined
-                  break
-                case 'stage3':
-                  councilData.stage3 = update.data as CouncilStage3Result | undefined
-                  councilData.statusMessage = undefined
-                  break
-                case 'complete':
-                  councilData.statusMessage = undefined
-                  break
-                case 'error':
-                  lastMessage.content = `Error: ${update.error}`
-                  break
+                case "status":
+                  councilData.currentStage = update.stage as number | undefined;
+                  councilData.statusMessage = update.message as
+                    | string
+                    | undefined;
+                  break;
+                case "stage1":
+                  councilData.stage1 = update.data as
+                    | CouncilStage1Response[]
+                    | undefined;
+                  councilData.statusMessage = undefined;
+                  break;
+                case "stage2":
+                  councilData.stage2 = update.data as
+                    | CouncilStage2Ranking[]
+                    | undefined;
+                  councilData.stage2_metadata = update.metadata as
+                    | CouncilMetadata
+                    | undefined;
+                  councilData.statusMessage = undefined;
+                  break;
+                case "stage3":
+                  councilData.stage3 = update.data as
+                    | CouncilStage3Result
+                    | undefined;
+                  councilData.statusMessage = undefined;
+                  break;
+                case "complete":
+                  councilData.statusMessage = undefined;
+                  break;
+                case "error":
+                  lastMessage.content = `Error: ${update.error}`;
+                  break;
               }
-              
+
               updated[updated.length - 1] = {
                 ...lastMessage,
                 councilData,
-              }
+              };
             } else {
               // Regular text streaming update
               updated[updated.length - 1] = {
                 ...lastMessage,
-                content: typeof update === 'string' ? update : lastMessage.content,
-              }
+                content:
+                  typeof update === "string" ? update : lastMessage.content,
+              };
             }
-            
-            return updated
-          })
+
+            return updated;
+          });
         },
         accessToken,
-        userId
-      )
+        userId,
+      );
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Unknown error"
-      setError(`Failed to get response: ${errorMessage}`)
-      console.error("Error invoking AgentCore:", err)
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      setError(`Failed to get response: ${errorMessage}`);
+      console.error("Error invoking AgentCore:", err);
 
       // Update the assistant message with error
       setMessages((prev) => {
-        const updated = [...prev]
+        const updated = [...prev];
         updated[updated.length - 1] = {
           ...updated[updated.length - 1],
           content:
             "I apologize, but I encountered an error processing your request. Please try again.",
-        }
-        return updated
-      })
+        };
+        return updated;
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    sendMessage(input)
-  }
+    sendMessage(input);
+  };
 
   // Handle feedback submission
   const handleFeedbackSubmit = async (
     messageContent: string,
     feedbackType: "positive" | "negative",
-    comment: string
+    comment: string,
   ) => {
     try {
       // Use ID token for API Gateway Cognito authorizer (not access token)
-      const idToken = auth.user?.id_token
+      const idToken = auth.user?.id_token;
 
       if (!idToken) {
-        throw new Error("Authentication required. Please log in again.")
+        throw new Error("Authentication required. Please log in again.");
       }
 
       await submitFeedback(
@@ -202,37 +228,42 @@ export default function ChatInterface() {
           feedbackType,
           comment: comment || undefined,
         },
-        idToken
-      )
+        idToken,
+      );
 
-      console.log("Feedback submitted successfully")
+      console.log("Feedback submitted successfully");
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Unknown error"
-      console.error("Error submitting feedback:", err)
-      setError(`Failed to submit feedback: ${errorMessage}`)
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      console.error("Error submitting feedback:", err);
+      setError(`Failed to submit feedback: ${errorMessage}`);
     }
-  }
+  };
 
   // Start a new chat (generates new session ID)
   const startNewChat = () => {
-    setMessages([])
-    setInput("")
-    setError(null)
+    setMessages([]);
+    setInput("");
+    setError(null);
     // Note: sessionId stays the same for the component lifecycle
     // If you want a new session ID, you'd need to remount the component
-  }
+  };
 
   // Check if this is the initial state (no messages)
-  const isInitialState = messages.length === 0
+  const isInitialState = messages.length === 0;
 
   // Check if there are any assistant messages
-  const hasAssistantMessages = messages.some((message) => message.role === "assistant")
+  const hasAssistantMessages = messages.some(
+    (message) => message.role === "assistant",
+  );
 
   return (
     <div className="flex flex-col h-screen w-full">
       {/* Fixed header */}
       <div className="flex-none">
-        <ChatHeader onNewChat={startNewChat} canStartNewChat={hasAssistantMessages} />
+        <ChatHeader
+          onNewChat={startNewChat}
+          canStartNewChat={hasAssistantMessages}
+        />
         {error && (
           <div className="bg-red-50 border-l-4 border-red-500 p-4 mx-4 mt-2">
             <p className="text-sm text-red-700">{error}</p>
@@ -249,7 +280,9 @@ export default function ChatInterface() {
 
           {/* Centered welcome message */}
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">Welcome to LLM Council</h2>
+            <h2 className="text-2xl font-bold text-gray-800">
+              Welcome to LLM Council
+            </h2>
             <p className="text-gray-600 mt-2">Ask me anything to get started</p>
           </div>
 
@@ -294,5 +327,5 @@ export default function ChatInterface() {
         </>
       )}
     </div>
-  )
+  );
 }

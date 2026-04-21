@@ -10,13 +10,13 @@ export function invokeAgentCore(
   sessionId: string,
   onStreamUpdate: (content: string) => void,
   accessToken: string,
-  userId: string
-): Promise<void>
+  userId: string,
+): Promise<void>;
 
-export function generateSessionId(): string
+export function generateSessionId(): string;
 
 export function setAgentConfig(
   agentRuntimeArn: string,
   awsRegion: string,
-  agentPattern?: string
-): Promise<void>
+  agentPattern?: string,
+): Promise<void>;

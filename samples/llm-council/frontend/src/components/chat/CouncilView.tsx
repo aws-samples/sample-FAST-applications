@@ -7,14 +7,14 @@
  * - Stage 3: Final synthesized answer
  */
 
-import { useState } from "react"
-import { CouncilData } from "./types"
-import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useState } from "react";
+import { CouncilData } from "./types";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface CouncilViewProps {
-  councilData: CouncilData
+  councilData: CouncilData;
 }
 
 /**
@@ -23,17 +23,17 @@ interface CouncilViewProps {
  */
 function getModelShortName(modelId: string): string {
   if (modelId.includes(".")) {
-    const namePart = modelId.split(".").pop() || modelId
-    const withoutVersion = namePart.split(":")[0]
-    const parts = withoutVersion.split("-")
-    const filtered = parts.filter(p => !/^\d{6,}$/.test(p) && p !== "v1")
-    return filtered.join("-")
+    const namePart = modelId.split(".").pop() || modelId;
+    const withoutVersion = namePart.split(":")[0];
+    const parts = withoutVersion.split("-");
+    const filtered = parts.filter((p) => !/^\d{6,}$/.test(p) && p !== "v1");
+    return filtered.join("-");
   }
-  return modelId
+  return modelId;
 }
 
 export function CouncilView({ councilData }: CouncilViewProps) {
-  const [activeTab, setActiveTab] = useState("0")
+  const [activeTab, setActiveTab] = useState("0");
 
   // Show status message if we're still processing
   if (councilData.statusMessage) {
@@ -41,10 +41,12 @@ export function CouncilView({ councilData }: CouncilViewProps) {
       <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
         <div className="flex items-center gap-2">
           <div className="animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full" />
-          <span className="text-sm text-blue-800">{councilData.statusMessage}</span>
+          <span className="text-sm text-blue-800">
+            {councilData.statusMessage}
+          </span>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -57,7 +59,12 @@ export function CouncilView({ councilData }: CouncilViewProps) {
             Individual Council Member Responses
           </h3>
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full" style={{ gridTemplateColumns: `repeat(${councilData.stage1.length}, 1fr)` }}>
+            <TabsList
+              className="grid w-full"
+              style={{
+                gridTemplateColumns: `repeat(${councilData.stage1.length}, 1fr)`,
+              }}
+            >
               {councilData.stage1.map((response, idx) => (
                 <TabsTrigger key={idx} value={idx.toString()}>
                   {getModelShortName(response.model)}
@@ -88,17 +95,21 @@ export function CouncilView({ councilData }: CouncilViewProps) {
 
           {/* Aggregate Scores */}
           <div className="mb-4">
-            <h4 className="text-xs font-medium text-gray-700 mb-2">Aggregate Scores</h4>
+            <h4 className="text-xs font-medium text-gray-700 mb-2">
+              Aggregate Scores
+            </h4>
             <div className="space-y-2">
               {(councilData.stage2_metadata.aggregate_rankings ?? [])
                 .sort((a, b) => a.average_rank - b.average_rank)
                 .map((score, idx) => {
-                  const isWinner = idx === 0
+                  const isWinner = idx === 0;
                   return (
                     <div
                       key={idx}
                       className={`flex items-center justify-between p-2 rounded ${
-                        isWinner ? 'bg-green-50 border border-green-200' : 'bg-gray-50'
+                        isWinner
+                          ? "bg-green-50 border border-green-200"
+                          : "bg-gray-50"
                       }`}
                     >
                       <div className="flex items-center gap-2">
@@ -106,26 +117,36 @@ export function CouncilView({ councilData }: CouncilViewProps) {
                           {getModelShortName(score.model)}
                         </span>
                         {isWinner && (
-                          <Badge variant="default" className="text-xs">Winner</Badge>
+                          <Badge variant="default" className="text-xs">
+                            Winner
+                          </Badge>
                         )}
                       </div>
                       <div className="flex items-center gap-4 text-sm">
                         <span className="text-gray-600">
-                          Avg Rank: <span className="font-medium">{score.average_rank.toFixed(2)}</span>
+                          Avg Rank:{" "}
+                          <span className="font-medium">
+                            {score.average_rank.toFixed(2)}
+                          </span>
                         </span>
                         <span className="text-gray-600">
-                          Ranked by: <span className="font-medium">{score.rankings_count}</span>
+                          Ranked by:{" "}
+                          <span className="font-medium">
+                            {score.rankings_count}
+                          </span>
                         </span>
                       </div>
                     </div>
-                  )
+                  );
                 })}
             </div>
           </div>
 
           {/* Individual Rankings */}
           <div>
-            <h4 className="text-xs font-medium text-gray-700 mb-2">Individual Rankings</h4>
+            <h4 className="text-xs font-medium text-gray-700 mb-2">
+              Individual Rankings
+            </h4>
             <div className="space-y-2">
               {councilData.stage2.map((ranking, idx) => (
                 <div key={idx} className="text-xs bg-gray-50 p-2 rounded">
@@ -162,5 +183,5 @@ export function CouncilView({ councilData }: CouncilViewProps) {
         </Card>
       )}
     </div>
-  )
+  );
 }

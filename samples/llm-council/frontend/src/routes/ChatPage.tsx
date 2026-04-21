@@ -1,14 +1,14 @@
-"use client"
+"use client";
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import ChatInterface from "@/components/chat/ChatInterface"
-import { Button } from "@/components/ui/button"
-import { useAuth } from "@/hooks/useAuth"
-import { GlobalContextProvider } from "@/app/context/GlobalContext"
+import ChatInterface from "@/components/chat/ChatInterface";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { GlobalContextProvider } from "@/app/context/GlobalContext";
 
 export default function ChatPage() {
-  const { isAuthenticated, signIn } = useAuth()
+  const { isAuthenticated, signIn } = useAuth();
 
   if (!isAuthenticated) {
     return (
@@ -16,7 +16,7 @@ export default function ChatPage() {
         <p className="text-4xl">Please sign in</p>
         <Button onClick={() => signIn()}>Sign In</Button>
       </div>
-    )
+    );
   }
 
   return (
@@ -25,5 +25,5 @@ export default function ChatPage() {
         <ChatInterface />
       </div>
     </GlobalContextProvider>
-  )
+  );
 }

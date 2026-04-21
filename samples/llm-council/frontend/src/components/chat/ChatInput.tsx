@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import { FormEvent, KeyboardEvent, useRef, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Loader2Icon, Send } from "lucide-react"
+import { FormEvent, KeyboardEvent, useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Loader2Icon, Send } from "lucide-react";
 
 interface ChatInputProps {
-  input: string
-  setInput: (input: string) => void
-  handleSubmit: (e: FormEvent) => void
-  isLoading: boolean
-  className?: string
+  input: string;
+  setInput: (input: string) => void;
+  handleSubmit: (e: FormEvent) => void;
+  isLoading: boolean;
+  className?: string;
 }
 
 export function ChatInput({
@@ -20,34 +20,34 @@ export function ChatInput({
   isLoading,
   className = "",
 }: ChatInputProps) {
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Auto-resize the textarea based on content
   useEffect(() => {
-    const textarea = textareaRef.current
+    const textarea = textareaRef.current;
     if (textarea) {
-      textarea.style.height = "0px"
-      const scrollHeight = textarea.scrollHeight
-      textarea.style.height = scrollHeight + "px"
+      textarea.style.height = "0px";
+      const scrollHeight = textarea.scrollHeight;
+      textarea.style.height = scrollHeight + "px";
     }
-  }, [input])
+  }, [input]);
 
   // Handle key presses for Ctrl+Enter to add new line and Enter to submit
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter") {
       if (e.ctrlKey) {
         // Add a new line when Ctrl+Enter is pressed
-        setInput(`${input}\n\n`)
-        e.preventDefault()
+        setInput(`${input}\n\n`);
+        e.preventDefault();
       } else if (!e.shiftKey) {
         // Submit the form when Enter is pressed without Shift
         if (input.trim()) {
-          e.preventDefault()
-          handleSubmit(e as unknown as FormEvent)
+          e.preventDefault();
+          handleSubmit(e as unknown as FormEvent);
         }
       }
     }
-  }
+  };
 
   return (
     <div className={`p-4 w-full ${className}`}>
@@ -67,7 +67,11 @@ export function ChatInput({
           autoFocus
         />
 
-        <Button type="submit" disabled={!input.trim() || isLoading} className="h-10">
+        <Button
+          type="submit"
+          disabled={!input.trim() || isLoading}
+          className="h-10"
+        >
           {isLoading ? (
             <>
               <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
@@ -82,5 +86,5 @@ export function ChatInput({
         </Button>
       </form>
     </div>
-  )
+  );
 }

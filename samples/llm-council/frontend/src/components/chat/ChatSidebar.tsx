@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { MessageSquare, Plus } from "lucide-react"
-import { ChatSession } from "./types"
+import { MessageSquare, Plus } from "lucide-react";
+import { ChatSession } from "./types";
 import {
   Sidebar,
   SidebarContent,
@@ -12,15 +12,15 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
 
 type ChatSidebarProps = {
-  sessions: ChatSession[]
-  currentSessionId?: string
-  onSessionSelect: (session: ChatSession) => void
-  onNewChat: () => void
-}
+  sessions: ChatSession[];
+  currentSessionId?: string;
+  onSessionSelect: (session: ChatSession) => void;
+  onNewChat: () => void;
+};
 
 export function ChatSidebar({
   sessions,
@@ -58,5 +58,5 @@ export function ChatSidebar({
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }
