@@ -20,7 +20,7 @@ describe("Configuration Value Compatibility", () => {
   afterEach(() => {
     // Restore original env
     Object.keys(import.meta.env).forEach((key) => {
-      delete (import.meta.env as any)[key];
+      delete (import.meta.env as Record<string, unknown>)[key];
     });
     Object.assign(import.meta.env, originalEnv);
   });

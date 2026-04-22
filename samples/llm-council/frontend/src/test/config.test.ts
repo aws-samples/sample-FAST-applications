@@ -9,7 +9,7 @@ import { resolve } from "path";
  * Helper function to parse JSONC (JSON with comments)
  * Strips single-line and multi-line comments before parsing
  */
-function parseJSONC(content: string): any {
+function parseJSONC(content: string): Record<string, unknown> {
   // Remove single-line comments
   let cleaned = content.replace(/\/\/.*$/gm, "");
   // Remove multi-line comments

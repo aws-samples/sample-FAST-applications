@@ -96,7 +96,7 @@ describe("Authentication State Routing", () => {
               access_token: "test-token",
               id_token: "test-id-token",
               profile: { sub: "test-user-id" },
-            } as any,
+            } as unknown as ReturnType<typeof useAuth>["user"],
             isLoading: false,
             error: undefined,
             token: "test-id-token",
@@ -137,7 +137,7 @@ describe("Authentication State Routing", () => {
                   access_token: "test-token",
                   id_token: "test-id-token",
                   profile: { sub: "test-user-id" },
-                } as any)
+                } as unknown as ReturnType<typeof useAuth>["user"])
               : null,
             isLoading: false,
             error: undefined,
@@ -178,7 +178,7 @@ describe("Authentication State Routing", () => {
             access_token: "test-token",
             id_token: "test-id-token",
             profile: { sub: "test-user-id" },
-          } as any,
+          } as unknown as ReturnType<typeof useAuth>["user"],
           isLoading: false,
           error: undefined,
           token: "test-id-token",

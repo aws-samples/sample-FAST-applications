@@ -1,5 +1,5 @@
-import tseslint from "@typescript-eslint/eslint-plugin"
-import tsparser from "@typescript-eslint/parser"
+import tseslint from "@typescript-eslint/eslint-plugin";
+import tsparser from "@typescript-eslint/parser";
 
 const eslintConfig = [
   {
@@ -20,10 +20,15 @@ const eslintConfig = [
     },
   },
   {
-    ignores: ["node_modules/**", "build/**", "delete/**", "tmp/**", ".vite/**", "src/app/**"],
+    ignores: [
+      "node_modules/**",
+      "build/**",
+      "delete/**",
+      "tmp/**",
+      ".vite/**",
+      "src/app/**",
+    ],
   },
-]
+];
 
-export default eslintConfig
-
-
+export default eslintConfig;
