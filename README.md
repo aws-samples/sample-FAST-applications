@@ -54,7 +54,7 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 
 **Use Case**: Building applications where response quality matters more than latency, reducing single-model bias, combining strengths of diverse model providers, or any use case benefiting from collaborative AI deliberation
 
-![LLM Council Stages](samples/img/llm-council-stages.png)
+![LLM Council Stages](samples/llm-council/docs/architecture-diagram/llm-council-stages.png)
 
 
 <!-- Template for new samples:
