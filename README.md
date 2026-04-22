@@ -18,7 +18,7 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 |--------|-------------|
 | [Restaurant Assistant](#restaurant-assistant) | Knowledge base integration, reservation management, and customer-facing chat widget |
 | [CopilotKit Generative UI](#copilotkit-generative-ui) | Generative UI, shared state, and human-in-the-loop interactions via CopilotKit |
-| [LLM Council](#llm-council) | An implementation of "Council of LLMs" pattern on AWS. Multiple diverse LLMs collaborate through a 3-stage deliberation process -- independent responses, anonymized peer ranking, and chairman synthesis |
+| [LLM Council](#llm-council) | An implementation of "Council of LLMs" pattern on AWS. Builds consensus among multiple diverse LLMs.|
 
 <!-- Add new samples to the table above as they are added -->
 
@@ -54,9 +54,7 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 
 **Use Case**: Building applications where response quality matters more than latency, reducing single-model bias, combining strengths of diverse model providers, or any use case benefiting from collaborative AI deliberation
 
-**Screenshots**:
-
-![LLM Council - Stage 1: Individual Council Member Responses](samples/llm-council/docs/architecture-diagram/llm-council-demo.gif)
+![LLM Council Stages](samples/img/llm-council-stages.png)
 
 
 <!-- Template for new samples:
