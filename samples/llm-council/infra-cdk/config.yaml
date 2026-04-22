@@ -1,0 +1,21 @@
+stack_name_base: FAST-stack
+
+# Optional: Set to automatically create an admin user and email credentials
+# If not provided, you'll need to manually create users via AWS Console
+admin_user_email: null # Example: admin@example.com
+
+backend:
+  pattern: llm-council-agent # Available patterns: strands-single-agent, langgraph-single-agent, llm-council-agent
+  deployment_type: docker # Available deployment types: docker (default), zip
+  
+  # LLM Council Configuration (only used when pattern: llm-council-agent)
+  llm_council:
+    # Council members - diverse models from different providers for varied perspectives
+    council_models:
+      - meta.llama4-maverick-17b-instruct-v1:0           # Meta Llama 4 Maverick
+      - google.gemma-3-27b-it                              # Google Gemma 3 27B
+      - openai.gpt-oss-120b-1:0                            # OpenAI GPT OSS 120B
+      - deepseek.v3.2                                      # DeepSeek V3.2
+    
+    # Chairman model - synthesizes final answer from council deliberations
+    chairman_model: us.anthropic.claude-sonnet-4-5-20250929-v1:0  # Anthropic Claude Sonnet 4.5

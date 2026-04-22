@@ -18,6 +18,7 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 |--------|-------------|
 | [Restaurant Assistant](#restaurant-assistant) | Knowledge base integration, reservation management, and customer-facing chat widget |
 | [CopilotKit Generative UI](#copilotkit-generative-ui) | Generative UI, shared state, and human-in-the-loop interactions via CopilotKit |
+| [LLM Council](#llm-council) | An implementation of "Council of LLMs" pattern on AWS. Builds consensus among multiple diverse LLMs.|
 
 <!-- Add new samples to the table above as they are added -->
 
@@ -42,6 +43,19 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 **Use Case**: Building agent-native applications where the AI drives the UI — not just chat — including dashboards, collaborative canvases, and interactive workflows.
 
 ![CopilotKit Generative UI](samples/copilotkit-generative-ui/docs/img/generative-ui-screenshot2.png)
+
+
+### [LLM Council](samples/llm-council/)
+
+**Description**: An implementation of "Council of LLMs" pattern on AWS. Multiple diverse LLMs collaborate through a 3-stage deliberation process -- independent responses, anonymized peer ranking, and chairman synthesis -- to produce higher-quality answers than any single model alone.
+
+
+**Key Differences from FAST**: Replaces single-agent pattern with multi-model council orchestration, parallel Bedrock Converse API invocations across 4 providers (Anthropic, Meta, Amazon, Cohere), anonymized peer ranking with aggregate scoring, chairman synthesis stage, custom streaming event format with stage-by-stage SSE updates, council-specific React UI with tabbed model responses and ranking matrix
+
+**Use Case**: Building applications where response quality matters more than latency, reducing single-model bias, combining strengths of diverse model providers, or any use case benefiting from collaborative AI deliberation
+
+![LLM Council Stages](samples/llm-council/docs/architecture-diagram/llm-council-stages.png)
+
 
 <!-- Template for new samples:
 ### [Sample Name](samples/sample-directory-name/)

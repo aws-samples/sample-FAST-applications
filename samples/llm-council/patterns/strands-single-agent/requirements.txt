@@ -1,0 +1,4 @@
+# Strands agent dependencies with pinned versions
+strands-agents==1.16.0
+mcp==1.23.1
+bedrock-agentcore[strands-agents]==1.0.6
