@@ -1,5 +1,5 @@
 # LangGraph agent dependencies with pinned versions
-langgraph==1.0.5
+langgraph==1.0.10rc1
 langchain-aws==1.0.0
 langchain-mcp-adapters==0.1.13
 langgraph-checkpoint-aws==1.0.1
