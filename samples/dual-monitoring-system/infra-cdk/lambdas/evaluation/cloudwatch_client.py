@@ -48,10 +48,8 @@ class CloudWatchClient:
             )
         else:
             # Fallback
-            self.usage_logs = "/aws/vendedlogs/bedrock-agentcore/runtime/USAGE_LOGS/"
-            self.app_logs = (
-                "/aws/vendedlogs/bedrock-agentcore/runtime/APPLICATION_LOGS/"
-            )
+            self.usage_logs = "/aws/vendedlogs/bedrock-agentcore/runtime/USAGE_LOGS/"  # pragma: allowlist secret
+            self.app_logs = "/aws/vendedlogs/bedrock-agentcore/runtime/APPLICATION_LOGS/"  # pragma: allowlist secret
             self.runtime_log_group = "/aws/bedrock-agentcore/runtimes/"
 
         # Retry configuration

@@ -29,12 +29,14 @@
     "constructs": "^10.0.0",
     "express-rate-limit": "^8.3.2",
     "flatted": "^3.4.2",
-    "next": "^16.2.2",
+    "next": "^16.2.4",
     "yaml": "^2.3.4"
   },
   "overrides": {
     "glob": "^10.4.5",
     "brace-expansion": "^2.0.2",
-    "minimatch": "^9.0.4"
+    "minimatch": "^9.0.4",
+    "postcss": "^8.4.32",
+    "fast-xml-parser": "^5.7.3"
   }
 }

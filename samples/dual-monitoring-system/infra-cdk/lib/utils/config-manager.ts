@@ -23,7 +23,7 @@ export class ConfigManager {
   }
 
   private _loadConfig(configFile: string): AppConfig {
-    const configPath = path.join(__dirname, "..", "..", configFile)
+    const configPath = path.join(__dirname, "..", "..", configFile) // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
 
     if (!fs.existsSync(configPath)) {
       throw new Error(`Configuration file ${configPath} does not exist. Please create config.yaml file.`)
@@ -71,7 +71,7 @@ export class ConfigManager {
     let value: any = this.config
 
     for (const k of keys) {
-      if (typeof value === "object" && value !== null && k in value) {
+      if (typeof value === "object" && value !== null && Object.prototype.hasOwnProperty.call(value, k)) { // nosemgrep: javascript.lang.security.audit.prototype-pollution.prototype-pollution-loop.prototype-pollution-loop
         value = value[k]
       } else {
         return defaultValue

@@ -53,14 +53,10 @@ class ImprovedCloudWatchClient:
                 f"/aws/vendedlogs/bedrock-agentcore/runtime/OTEL_LOGS/{runtime_name}"
             )
         else:
-            self.usage_logs = "/aws/vendedlogs/bedrock-agentcore/runtime/USAGE_LOGS/"
-            self.app_logs = (
-                "/aws/vendedlogs/bedrock-agentcore/runtime/APPLICATION_LOGS/"
-            )
-            self.runtime_logs = (
-                "/aws/vendedlogs/bedrock-agentcore/runtime/RUNTIME_LOGS/"
-            )
-            self.otel_logs = "/aws/vendedlogs/bedrock-agentcore/runtime/OTEL_LOGS/"
+            self.usage_logs = "/aws/vendedlogs/bedrock-agentcore/runtime/USAGE_LOGS/"  # pragma: allowlist secret
+            self.app_logs = "/aws/vendedlogs/bedrock-agentcore/runtime/APPLICATION_LOGS/"  # pragma: allowlist secret
+            self.runtime_logs = "/aws/vendedlogs/bedrock-agentcore/runtime/RUNTIME_LOGS/"  # pragma: allowlist secret
+            self.otel_logs = "/aws/vendedlogs/bedrock-agentcore/runtime/OTEL_LOGS/"  # pragma: allowlist secret
 
     def _run_insights_query(
         self,

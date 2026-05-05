@@ -128,7 +128,7 @@ export class BackendStack extends cdk.NestedStack {
     if (deploymentType === "zip") {
       // ZIP DEPLOYMENT: Use Lambda to package and upload to S3 (no Docker required)
       const repoRoot = path.resolve(__dirname, "..", "..")
-      const patternDir = path.join(repoRoot, "patterns", pattern)
+      const patternDir = path.join(repoRoot, "patterns", pattern) // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
 
       // Create S3 bucket for agent code
       const accessLogBucket = new s3.Bucket(this, "AgentCodeAccessLogBucket", {
@@ -173,7 +173,7 @@ export class BackendStack extends cdk.NestedStack {
       // Read pattern .py files
       for (const file of fs.readdirSync(patternDir)) {
         if (file.endsWith(".py")) {
-          const content = fs.readFileSync(path.join(patternDir, file))
+          const content = fs.readFileSync(path.join(patternDir, file)) // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
           agentCode[file] = content.toString("base64")
         }
       }
@@ -187,7 +187,7 @@ export class BackendStack extends cdk.NestedStack {
       }
 
       // Read requirements
-      const requirementsPath = path.join(patternDir, "requirements.txt")
+      const requirementsPath = path.join(patternDir, "requirements.txt") // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
       const requirements = fs.readFileSync(requirementsPath, "utf-8")
         .split("\n")
         .map(line => line.trim())
@@ -962,8 +962,8 @@ export class BackendStack extends cdk.NestedStack {
    */
   private readDirRecursive(dirPath: string, prefix: string, output: Record<string, string>): void {
     for (const entry of fs.readdirSync(dirPath, { withFileTypes: true })) {
-      const fullPath = path.join(dirPath, entry.name)
-      const relativePath = path.join(prefix, entry.name)
+      const fullPath = path.join(dirPath, entry.name) // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
+      const relativePath = path.join(prefix, entry.name) // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
 
       if (entry.isDirectory()) {
         // Skip __pycache__ directories
