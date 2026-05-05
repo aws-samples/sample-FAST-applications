@@ -14,33 +14,39 @@ def check_requirements_file() -> Tuple[bool, List[str]]:
         "strands-agents": ">=0.1.0",
         "hypothesis": ">=6.92.0",
     }
-    
+
     # These are provided by Lambda runtime or layers, should NOT be in requirements.txt
     excluded_deps = ["boto3", "aws-lambda-powertools"]
-    
+
     errors = []
-    
+
     try:
         with open("requirements.txt", "r") as f:
             content = f.read()
-            
+
         for dep, version in required_deps.items():
             if dep not in content:
                 errors.append(f"Missing dependency: {dep}{version}")
             elif version not in content:
                 errors.append(f"Incorrect version for {dep}: expected {version}")
-        
+
         # Check that excluded dependencies are not present
         for dep in excluded_deps:
             # Check if the dependency is listed (not just in comments)
-            lines = [line.strip() for line in content.split('\n') if line.strip() and not line.strip().startswith('#')]
+            lines = [
+                line.strip()
+                for line in content.split("\n")
+                if line.strip() and not line.strip().startswith("#")
+            ]
             if any(dep in line for line in lines):
-                errors.append(f"Dependency {dep} should not be in requirements.txt (provided by Lambda runtime/layer)")
-                
+                errors.append(
+                    f"Dependency {dep} should not be in requirements.txt (provided by Lambda runtime/layer)"
+                )
+
     except FileNotFoundError:
         errors.append("requirements.txt file not found")
         return False, errors
-    
+
     return len(errors) == 0, errors
 
 
@@ -48,9 +54,9 @@ def main():
     """Main validation function."""
     print("Validating Lambda dependencies...")
     print("-" * 50)
-    
+
     success, errors = check_requirements_file()
-    
+
     if success:
         print("✓ All required dependencies are properly configured")
         print("\nConfigured dependencies:")

@@ -235,7 +235,9 @@ def handler(event: dict, context) -> None:
             create_otel_wrapper(package_dir)
 
             # Download agent source asset from S3 and extract into package dir
-            logger.info(f"Downloading source asset from s3://{asset_bucket}/{asset_key}")
+            logger.info(
+                f"Downloading source asset from s3://{asset_bucket}/{asset_key}"
+            )
             s3.download_file(asset_bucket, asset_key, str(source_zip))
             with zipfile.ZipFile(source_zip, "r") as zf:
                 zf.extractall(package_dir)

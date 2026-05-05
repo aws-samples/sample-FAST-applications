@@ -28,7 +28,9 @@ secretsmanager = boto3.client("secretsmanager")
 
 AGENT_SPACE_ID = os.environ.get("AGENT_SPACE_ID", "")
 CORS_ALLOWED_ORIGIN = os.environ.get("CORS_ALLOWED_ORIGIN", "*")
-DEVOPS_API_BASE = f"https://event-ai.{os.environ.get('AWS_REGION', 'us-east-1')}.api.aws"
+DEVOPS_API_BASE = (
+    f"https://event-ai.{os.environ.get('AWS_REGION', 'us-east-1')}.api.aws"
+)
 DEVOPS_IAM_SERVICE = "execute-api"
 
 
@@ -119,7 +121,9 @@ def handler(event: dict, context) -> dict:
     # Fetch webhook secret from Secrets Manager
     secret_arn = os.environ["WEBHOOK_SECRET_ARN"]
     try:
-        webhook_secret = secretsmanager.get_secret_value(SecretId=secret_arn)["SecretString"]
+        webhook_secret = secretsmanager.get_secret_value(SecretId=secret_arn)[
+            "SecretString"
+        ]
     except Exception as e:
         logger.error(f"Secrets Manager read failed: {e}")
         return cors_response(500, {"error": "Could not retrieve webhook secret"})
@@ -182,9 +186,12 @@ def handler(event: dict, context) -> dict:
     # After firing, immediately try to fetch any existing investigations
     investigations = fetch_investigations()
 
-    return cors_response(200, {
-        "webhookStatus": webhook_status,
-        "webhookResponse": webhook_body,
-        "investigations": investigations,
-        "incidentId": incident["incidentId"],
-    })
+    return cors_response(
+        200,
+        {
+            "webhookStatus": webhook_status,
+            "webhookResponse": webhook_body,
+            "investigations": investigations,
+            "incidentId": incident["incidentId"],
+        },
+    )
