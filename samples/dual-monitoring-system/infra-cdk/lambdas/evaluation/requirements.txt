@@ -1,0 +1,13 @@
+# Boto3 is included in the Python Lambda runtime, so it's unnecessary to include it here.
+# AWS Lambda Powertools is installed as a layer in the CDK stack, so it's not needed here.
+# For local development: pip install boto3 "aws-lambda-powertools[all]"
+
+# AgentCore Evaluation SDK
+bedrock-agentcore>=1.0.6
+bedrock-agentcore-starter-toolkit>=0.1.0
+
+# AI Analysis Engine - Strands agents for pattern analysis and prompt improvement
+strands-agents>=0.1.0
+
+# Property-Based Testing - Hypothesis for testing correctness properties
+hypothesis>=6.92.0
