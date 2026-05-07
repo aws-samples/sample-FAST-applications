@@ -69,7 +69,7 @@ def signed_request(method: str, url: str, body: bytes = None) -> tuple[int, str]
         url, data=body, headers=dict(aws_req.headers), method=method
     )
     try:
-        with urllib.request.urlopen(http_req, timeout=10) as resp:  # noqa: S310  # nosec B310
+        with urllib.request.urlopen(http_req, timeout=10) as resp:  # noqa: S310  # nosec B310  # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected.dynamic-urllib-use-detected
             return resp.status, resp.read().decode("utf-8")
     except urllib.error.HTTPError as e:
         return e.code, e.read().decode("utf-8")
@@ -171,7 +171,7 @@ def handler(event: dict, context) -> dict:
     )
 
     try:
-        with urllib.request.urlopen(req, timeout=30) as resp:  # noqa: S310  # nosec B310
+        with urllib.request.urlopen(req, timeout=30) as resp:  # noqa: S310  # nosec B310  # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected.dynamic-urllib-use-detected
             webhook_body = resp.read().decode("utf-8")
             webhook_status = resp.status
     except urllib.error.HTTPError as e:

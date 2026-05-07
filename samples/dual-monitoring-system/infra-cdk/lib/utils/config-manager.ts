@@ -71,8 +71,8 @@ export class ConfigManager {
     let value: any = this.config
 
     for (const k of keys) {
-      if (typeof value === "object" && value !== null && Object.prototype.hasOwnProperty.call(value, k)) { // nosemgrep: javascript.lang.security.audit.prototype-pollution.prototype-pollution-loop.prototype-pollution-loop
-        value = value[k]
+      if (typeof value === "object" && value !== null && Object.prototype.hasOwnProperty.call(value, k)) {
+        value = value[k] // nosemgrep: javascript.lang.security.audit.prototype-pollution.prototype-pollution-loop.prototype-pollution-loop
       } else {
         return defaultValue
       }

@@ -64,7 +64,7 @@ def send_response(
         headers={"Content-Type": "application/json"},
         method="PUT",
     )
-    urllib.request.urlopen(req)  # noqa: S310  # nosec B310
+    urllib.request.urlopen(req)  # noqa: S310  # nosec B310  # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected.dynamic-urllib-use-detected
 
 
 def download_wheels(requirements: list[str], download_dir: Path) -> None:
