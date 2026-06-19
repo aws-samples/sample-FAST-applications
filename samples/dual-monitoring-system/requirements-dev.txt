@@ -2,5 +2,5 @@ ruff==0.14.1
 aws-cdk-lib==2.220.0
 constructs==10.0.79
 pyyaml==6.0.1
-pytest==8.3.4
+pytest==9.0.3
 hypothesis==6.122.3
