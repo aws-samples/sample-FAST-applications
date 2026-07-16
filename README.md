@@ -22,6 +22,7 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 | [Dual Monitoring System](#dual-monitoring-system) | Dual-layer monitoring for agentic solutions using AgentCore Evaluations and AWS DevOps Agent |
 | [AgentCore AWS Specialist Agent](#agentcore-aws-specialist-agent) | AWS specialist chat agent with Gateway MCP tools, long-term memory, web search, Skills on Runtime, and a NAT-free VPC |
 | [AnyCompany Bank](#anycompany-bank) | Governed multi-agent Know-Your-Customer onboarding — one Gateway fronts both tools (MCP) and models (inference), enforced by Cedar Policy, with a managed Harness, Guardrails, and OpenTelemetry observability |
+| [Agentic Knowledge Discovery](#agentic-knowledge-discovery) | Combines a Bedrock Knowledge Base (documents) with an Aurora PostgreSQL metadata store (structured search), with metadata-filtered retrieval, page-level citations, and both Strands and LangGraph patterns |
 
 <!-- Add new samples to the table above as they are added -->
 
@@ -100,6 +101,18 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 <div align="center">
 <img src="samples/anycompany-bank/docs/assets/architecture.png" alt="AnyCompany Bank architecture: a single AgentCore Gateway fronts both the KYC tools (MCP target) and Bedrock models (inference target); a Runtime orchestrator runs a Credit Analyst and Compliance Officer in parallel, a managed Harness is the declarative counterpart, AgentCore Policy enforces Cedar authorization on every request, Memory holds per-customer history, Agent Registry the governed catalog, and OpenTelemetry traces flow to CloudWatch" width="100%" />
 </div>
+
+### [Agentic Knowledge Discovery](samples/agentic-knowledge-discovery/)
+
+**Description**: A full-stack agent that answers questions over a mix of unstructured documents and structured metadata. It plans its retrieval — querying a metadata database to find relevant documents, then running a filtered semantic search over their content — and cites the exact source pages.
+
+**Built on FAST**: v0.4.2
+
+**Key Differences from FAST**: Adds a Bedrock Knowledge Base (OpenSearch Serverless, Amazon Nova multimodal embeddings, hierarchical chunking, Bedrock Data Automation parsing) and an Aurora PostgreSQL metadata store; exposes two Gateway retrieval tools (`doc_search` and `structured_search`) that share a `doc_id` and metadata keys for combined structured + unstructured retrieval; adds page-level citations and follow-up suggestions; ships both Strands and LangGraph patterns behind AG-UI with in-UI model selection (Claude and GPT via Bedrock Mantle).
+
+**Use Case**: Building assistants that must reason across a document corpus and its structured metadata together — discovering the right documents by attribute, then searching only those, with grounded page-level citations.
+
+![Agentic Knowledge Discovery UI](samples/agentic-knowledge-discovery/docs/img/screenshot.png)
 
 <!-- Template for new samples:
 ### [Sample Name](samples/sample-directory-name/)

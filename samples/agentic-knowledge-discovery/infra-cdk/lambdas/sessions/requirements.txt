@@ -1,0 +1,4 @@
+# Boto3 is included in the Python Lambda runtime, so it is unnecessary here.
+# AWS Lambda Powertools is provided via a layer in the CDK code, so it is not
+# needed here either. For local development: pip install "aws-lambda-powertools[all]"
+# The sessions API requires no extra dependencies.

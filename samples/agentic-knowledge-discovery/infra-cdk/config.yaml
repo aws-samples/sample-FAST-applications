@@ -1,0 +1,36 @@
+stack_name_base: agentic-knowledge-discovery
+
+# Optional: Set to automatically create an admin user and email credentials
+# If not provided, you'll need to manually create users via AWS Console
+admin_user_email: # Example: admin@example.com
+
+backend:
+  agent_name: FASTAgent # Name for the agent runtime (a-z, A-Z, 0-9, _)
+  pattern: strands-agent # Which agent implementation to deploy. Options: strands-agent | langgraph-agent
+  # The value must match a folder under patterns/. Both implementations speak the
+  # AG-UI protocol, so the frontend uses the same AG-UI parser for either.
+  deployment_type: docker # This sample builds the runtime as a container image (Docker/finch required)
+  # This stack creates a minimal data-plane VPC hosting Aurora PostgreSQL and the
+  # in-VPC tool Lambdas (structured_search, db-seed) with a Secrets Manager VPC
+  # endpoint. The AgentCore runtime and doc_search Lambda stay outside the VPC
+  # (runtime network mode is PUBLIC in v1). The Knowledge Base is created by this
+  # stack, so there is no knowledge_base_id to configure.
+
+  # Long-term memory uses a SemanticMemoryStrategy to extract and store facts across sessions.
+  # This incurs additional costs: $0.75/1,000 records stored + $0.50/1,000 retrieval calls.
+  # Set to true when you want to try persistent cross-session memory, which is keyed off of the
+  # Cognito userId.
+  use_long_term_memory: false
+  ltm_top_k: 10             # Number of facts to retrieve per turn (default: 10)
+  ltm_relevance_score: 0.3  # Minimum similarity threshold for retrieval (default: 0.3)
+
+  # VPC configuration - required when network_mode is VPC
+  # Your VPC must have the necessary VPC endpoints for the AWS services used
+  # (Bedrock, AgentCore, S3, Secrets Manager, CloudWatch Logs, etc.).
+  # vpc:
+  #   vpc_id: vpc-0abc1234def56789a
+  #   subnet_ids:
+  #     - subnet-aaaa1111bbbb2222c
+  #     - subnet-cccc3333dddd4444e
+  #   security_group_ids:  # Optional - a default SG is created if omitted
+  #     - sg-0abc1234def56789a
