@@ -1,8 +1,8 @@
 # AgentCore AWS Specialist Agent
 
 > [!NOTE]
-> A deep-dive article (in Japanese) on the implementation techniques used in this project is available. Please check it out!
-> https://zenn.dev/aws_japan/articles/006-aws-specialist-agent
+> A deep-dive article on the implementation techniques used in this project is available. Please check it out!
+> https://zenn-dev.translate.goog/aws_japan/articles/006-aws-specialist-agent?_x_tr_sl=ja&_x_tr_tl=en&_x_tr_hl=ja&_x_tr_pto=wapp&_x_tr_hist=true
 
 > 日本語版の README は [README-jp.md](README-jp.md) を参照してください。
 
