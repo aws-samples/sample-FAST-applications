@@ -1,5 +1,5 @@
 # Pinned to the same versions the strands-single-agent pattern uses
 # (agent/strands-single-agent/requirements.txt) so the MemorySessionManager
 # behavior matches the in-process tool this server replaces.
-mcp==1.27.1
+mcp==1.28.1
 bedrock-agentcore==1.12.0
