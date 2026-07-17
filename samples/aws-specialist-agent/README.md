@@ -1,5 +1,9 @@
 # AgentCore AWS Specialist Agent
 
+> [!NOTE]
+> A deep-dive article (in Japanese) on the implementation techniques used in this project is available. Please check it out!
+> https://zenn.dev/aws_japan/articles/006-aws-specialist-agent
+
 > 日本語版の README は [README-jp.md](README-jp.md) を参照してください。
 
 An AWS specialist agent demo built on Amazon Bedrock AgentCore: a secured, web-accessible chat application whose agent can reason about AWS, call AWS APIs and managed tools, search the web, and remember facts across sessions. This sample was showcased at the AgentCore booth at AWS Summit Japan 2026.

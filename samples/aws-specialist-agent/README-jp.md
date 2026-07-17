@@ -1,5 +1,9 @@
 # AgentCore AWS Specialist Agent
 
+> [!NOTE]
+> 本実装の工夫点について Dive Deep した記事を投稿しております。是非確認してみて下さい！
+> https://zenn.dev/aws_japan/articles/006-aws-specialist-agent
+
 > For the English README, see [README.md](README.md).
 
 Amazon Bedrock AgentCore 上に構築した AgentCore AWS Specialist Agent のデモです。セキュアでウェブからアクセスできるチャットアプリケーションで、エージェントは AWS について推論し、AWS API やマネージドツールを呼び出し、ウェブを検索し、セッションをまたいで事実を記憶できます。
