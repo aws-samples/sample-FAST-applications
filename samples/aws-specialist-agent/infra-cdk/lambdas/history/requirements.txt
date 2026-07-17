@@ -1,0 +1,4 @@
+# Boto3 is included in the Python Lambda runtime, so it's unnecessary to include it here.
+#
+# AWS Lambda Powertools is provided as a Lambda layer (see backend-stack.ts), so it is
+# not listed here. For local development: pip install "aws-lambda-powertools[all]"

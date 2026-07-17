@@ -1,0 +1,56 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/awslabs/automated-security-helper/refs/heads/main/automated_security_helper/schemas/AshConfig.json
+# ASH (Automated Security Helper) configuration.
+# Suppressions below are false positives or intentional design decisions;
+# each entry records the reason for security-review (PCSR) traceability.
+project_name: aws-specialist-agent
+
+global_settings:
+  severity_threshold: MEDIUM
+
+  ignore_paths:
+    - path: "**/.pytest_cache/**"
+      reason: "Local pytest cache (git-ignored); never shipped"
+    - path: "frontend/build/**"
+      reason: "Vite build output (git-ignored); scanned at source level instead"
+    - path: "**/node_modules/**"
+      reason: "Third-party dependency tree; audited via npm audit, not shipped in the sample"
+    - path: "**/*.tsbuildinfo"
+      reason: "TypeScript incremental build cache (git-ignored); high-entropy hashes are not secrets"
+
+  suppressions:
+    # --- bandit B104 (hardcoded_bind_all_interfaces) -----------------------
+    # The AgentCore Runtime MCP contract requires servers to listen on
+    # 0.0.0.0:8000 inside the container; the listener is only reachable
+    # through the Runtime endpoint (JWT-authorized), never exposed directly.
+    - rule_id: "B104"
+      path: "gateway/tools/ltm_mcp_server/server.py"
+      reason: "AgentCore Runtime MCP contract mandates binding 0.0.0.0:8000 in-container"
+    - rule_id: "B104"
+      path: "gateway/tools/strands_mcp_server/server.py"
+      reason: "AgentCore Runtime MCP contract mandates binding 0.0.0.0:8000 in-container"
+    - rule_id: "B104"
+      path: "tests/unit/test_ltm_mcp_server.py"
+      reason: "Test asserts the AgentCore MCP contract host value; no listener is opened"
+    - rule_id: "B104"
+      path: "tests/unit/test_strands_mcp_server.py"
+      reason: "Test asserts the AgentCore MCP contract host value; no listener is opened"
+
+    # --- detect-secrets ----------------------------------------------------
+    - rule_id: "SECRET-SECRET-KEYWORD"
+      path: "skills/agent-toolkit-for-aws/creating-secrets-using-best-practices/references/create-secrets-using-best-practices.md"
+      reason: "Vendored upstream AWS skill documentation; placeholder example values, not real secrets"
+    - rule_id: "SECRET-SECRET-KEYWORD"
+      path: "test-scripts/test-runtime-vpc-e2e.py"
+      reason: "Throwaway test password generated at runtime from uuid4; not a stored secret"
+    - rule_id: "SECRET-SECRET-KEYWORD"
+      path: "test-scripts/test-skills-e2e.py"
+      reason: "Throwaway test password generated at runtime from uuid4; not a stored secret"
+    - rule_id: "SECRET-SECRET-KEYWORD"
+      path: "tests/unit/test_models.py"
+      reason: "Unit-test fixture literal ('token-for-us-east-1'); not a credential"
+    - rule_id: "SECRET-HEX-HIGH-ENTROPY-STRING"
+      path: "skills-lock.json"
+      reason: "SHA-256 content hashes of vendored skills (integrity pins), not secrets"
+    - rule_id: "SECRET-HEX-HIGH-ENTROPY-STRING"
+      path: "scripts/vendor-skills.py"
+      reason: "Pinned upstream git commit SHA for reproducible vendoring, not a secret"

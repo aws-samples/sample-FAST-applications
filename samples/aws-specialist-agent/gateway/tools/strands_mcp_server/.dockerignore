@@ -1,0 +1,6 @@
+# Keep the image build context (and the CDK asset hash) limited to the files
+# the image actually copies — __pycache__ from local pytest runs must not
+# churn the asset hash.
+__pycache__/
+*.pyc
+.dockerignore

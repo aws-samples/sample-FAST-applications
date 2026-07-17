@@ -20,6 +20,7 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 | [CopilotKit Generative UI](#copilotkit-generative-ui) | Generative UI, shared state, and human-in-the-loop interactions via CopilotKit |
 | [LLM Council](#llm-council) | An implementation of "Council of LLMs" pattern on AWS. Builds consensus among multiple diverse LLMs.|
 | [Dual Monitoring System](#dual-monitoring-system) | Dual-layer monitoring for agentic solutions using AgentCore Evaluations and AWS DevOps Agent |
+| [AgentCore AWS Specialist Agent](#agentcore-aws-specialist-agent) | AWS specialist chat agent with Gateway MCP tools, long-term memory, web search, Skills on Runtime, and a NAT-free VPC |
 
 <!-- Add new samples to the table above as they are added -->
 
@@ -69,6 +70,17 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 **Use Case**: Monitoring multi-agent systems in production where traditional infrastructure metrics are insufficient — particularly swarm-based architectures with dynamic handoffs where quality degradation and failure propagation are hard to detect.
 
 ![Architecture Diagram](samples/dual-monitoring-system/docs/architecture-diagram/Dual-monitoring-20260407.jpg)
+
+### [AgentCore AWS Specialist Agent](samples/aws-specialist-agent/)
+**Description**: An AWS specialist chat agent showcased at the AgentCore booth at AWS Summit Japan 2026. The agent reasons about AWS, calls AWS APIs and managed tools through AgentCore Gateway, searches the web, executes code, and remembers facts across sessions.
+
+**Built on FAST**: v0.4.1
+
+**Key Differences from FAST**: Adds selectable models (Claude and OpenAI GPT on Bedrock via a CDK model registry), AgentCore Memory long-term memory with an LTM-listing MCP server, the Amazon-managed Web Search connector, a chat-history sidebar (API Gateway + Lambda + DynamoDB), a fully closed NAT-free VPC using only VPC endpoints, AWS Skills mounted from S3 Files at `/mnt/skills`, speculative pre-warming to cut cold-start latency, and multi-MCP-server management gated per user department by Cedar ABAC.
+
+**Use Case**: Building production-oriented specialist agents that need fine-grained per-user tool authorization, private networking, long-term memory, and multiple MCP tool sources on AgentCore.
+
+![AgentCore AWS Specialist Agent UI](samples/aws-specialist-agent/docs/img/screenshot.png)
 
 <!-- Template for new samples:
 ### [Sample Name](samples/sample-directory-name/)
