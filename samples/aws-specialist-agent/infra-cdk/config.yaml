@@ -1,0 +1,96 @@
+stack_name_base: fast-specialist-agent
+
+# Optional: Set to automatically create an admin user and email credentials
+# If not provided, you'll need to manually create users via AWS Console
+#
+# !!! Replace with your own real email address BEFORE deploying !!!
+# The value below is a committed placeholder. The initial temporary password is
+# emailed to this address, so unless it is a real, reachable address you cannot
+# sign in as the admin.
+#
+# The admin user is automatically added to the "finance" Cognito group
+# (cognito-stack.ts), which grants the admin role and access to all Gateway
+# tools. department/role authorization is driven by Cognito group membership —
+# the email address itself plays no part. Any OTHER users you create later must
+# be added to a group manually, or they are treated as "guest" and denied every
+# Gateway tool:
+#   aws cognito-idp admin-add-user-to-group --user-pool-id <pool-id> \
+#     --username <email> --group-name finance   # or engineering
+admin_user_email: your-email+fastprojectadmin@example.com
+
+backend:
+  pattern: strands-single-agent # See agent/ for available options
+  # Pattern prefix determines the frontend parser:
+  #   agui-*      → AG-UI parser      (e.g. agui-strands-agent)
+  #   strands-*   → Strands parser    (e.g. strands-single-agent)
+  #   langgraph-* → LangGraph parser  (e.g. langgraph-single-agent)
+  #   claude-*    → Claude parser     (e.g. claude-agent-sdk-single-agent)
+  # The folder name must match exactly and start with the desired parser prefix.
+  deployment_type: docker # Available deployment types: docker (default), zip (not supported for claude-agent-sdk)
+  # VPC mode is required for S3 Files / Skills mounting.
+  network_mode: VPC # Available network modes: PUBLIC (default), VPC
+  # How the VPC is managed: CDK = FastMainStack creates the VPC + endpoints + NAT
+  # via VpcStack (default); EXISTING = reuse backend.vpc via fromLookup.
+  vpc_management: CDK
+
+  # CDK-managed network overrides (used only when vpc_management: CDK).
+  # The values below are the defaults, written out explicitly. Changing the
+  # CIDR/AZs of an already-deployed VPC replaces it (and everything in it), so
+  # only change these on a fresh deployment. Use a non-overlapping CIDR when you
+  # run a SECOND environment in the same account/region.
+  vpc_cidr: 10.20.0.0/16 # runtime VPC CIDR
+  # Exactly two AZ names. They must map to AgentCore-supported AZ ids
+  # (us-east-1 -> use1-az1/az2/az4); the name->id mapping is per-account, so in
+  # a different account re-derive the right names with
+  # `aws ec2 describe-availability-zones`.
+  availability_zones:
+    - us-east-1b
+    - us-east-1d
+
+  # Long-term memory uses a SemanticMemoryStrategy to extract and store facts across sessions.
+  # This incurs additional costs: $0.75/1,000 records stored + $0.50/1,000 retrieval calls.
+  # Set to true when you want to try persistent cross-session memory, which is keyed off of the
+  # Cognito userId.
+  # The SemanticMemoryStrategy itself is always defined on the memory resource
+  # (no CDK diff when toggling); setting this to true makes the Strands Agent's
+  # AgentCoreMemorySessionManager enable retrieval from the /facts/{actorId}
+  # namespace. Cost: $0.75/1k stored + $0.50/1k retrievals.
+  use_long_term_memory: true
+  ltm_top_k: 10 # Number of facts to retrieve per turn (default: 10)
+  ltm_relevance_score: 0.3 # Minimum similarity threshold for retrieval (default: 0.3)
+
+  # Mount the vendored AWS skills (skills/agent-toolkit-for-aws/) into the
+  # runtime via S3 Files at mount_path, exposed through the Strands AgentSkills
+  # plugin.
+  # Requires network_mode: VPC + vpc_management: CDK.
+  skills:
+    enabled: true
+    mount_path: /mnt/skills
+
+  # Runtime session lifecycle, applied to every AgentCore Runtime in the stack.
+  # The values below are the defaults, written out explicitly. Both accept
+  # 60-28800 seconds; idle must not exceed max.
+  runtime_lifecycle:
+    # Keep VPC-mode microVMs warm across demo-length pauses (vs the 900s
+    # service default) to avoid repeated cold starts mid-conversation.
+    idle_session_timeout_seconds: 3600
+    # Max lifetime of a session before it is recycled (service default).
+    max_lifetime_seconds: 28800
+
+  # Existing-VPC configuration. Used ONLY when vpc_management is EXISTING
+  # (ignored under the default vpc_management: CDK above, which creates the VPC
+  # for you). To reuse your own VPC, set vpc_management: EXISTING and uncomment
+  # this block — the VPC must already have the VPC endpoints listed in
+  # docs/DEPLOYMENT.md. The IDs below are placeholders.
+  # vpc:
+  #   vpc_id: vpc-0abc1234def56789a
+  #   subnet_ids:
+  #     - subnet-aaaa1111bbbb2222c
+  #     - subnet-cccc3333dddd4444e
+  #   security_group_ids:  # Optional - a default SG is created if omitted
+  #     - sg-0abc1234def56789a
+
+# Per-user Cedar ABAC is driven by Cognito group membership (the Pre-Token
+# Lambda resolves the user's group -> department claim). Add users to the
+# "finance" / "engineering" groups (defined in cognito-stack.ts); no static map
+# here.

@@ -1,0 +1,5 @@
+# Strands Agents documentation MCP server. mcp is pinned to the same
+# version the other images use; the upstream package is pinned so the FastMCP
+# settings override (host/port/stateless_http) stays on a verified release.
+mcp==1.27.1
+strands-agents-mcp-server==0.2.7

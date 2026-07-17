@@ -1,0 +1,38 @@
+# Exclude large directories to keep build context small
+node_modules/
+.git/
+frontend/node_modules/
+frontend/dist/
+infra-cdk/node_modules/
+infra-cdk/cdk.out/
+.ruff_cache/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+.vscode/
+.idea/
+
+# The runtime image (agent/strands-single-agent/Dockerfile, built with the
+# repo root as context) only COPYs pyproject.toml, gateway/, and
+# agent/. Everything else in the repo is build-context noise: excluding it
+# keeps the asset hash stable so editing a skill, doc, script, or test does not
+# trigger a needless runtime rebuild on cdk deploy. These paths are
+# NOT used by the Docker build:
+.github/
+.kiro/
+.amazonq/
+.clinerules
+.mkdocs/
+docs/
+docs-jp/
+frontend/
+infra-cdk/
+skills/
+scripts/
+tests/
+test-scripts/

@@ -1,0 +1,23 @@
+# Strands agent dependencies (Phase 2b — bumped to current latest).
+# Verified together: deps resolve cleanly, strands ships vended_plugins.skills
+# .AgentSkills, and the bedrock-agentcore Memory integration used by
+# basic_agent.py (AgentCoreMemoryConfig / RetrievalConfig / SessionManager)
+# import and accept the same arguments under 1.12.0.
+# The [openai] extra adds the OpenAI SDK and aws-bedrock-token-generator, used by
+# the OpenAIResponsesModel path for GPT-5.x on the bedrock-mantle endpoint
+# (see agent/strands-single-agent/models.py). Claude-only use does not import
+# them (the openai branch is lazy).
+strands-agents[openai]==1.41.0
+# strands-agents-tools provides file_read (reads a skill's references/*.md from
+# the mounted /mnt/skills; the AgentSkills plugin only lists resource files —
+# Phase 2b) and the official AgentCoreCodeInterpreter tool that
+# replaced the in-repo wrapper. We deliberately do NOT use the
+# [agent_core_code_interpreter] extra: it pins bedrock-agentcore>=1.1.0,<1.2.0,
+# which conflicts with the ==1.12.0 the Memory integration requires. The extra
+# only adds that version constraint; the code_interpreter module ships in the
+# base wheel and works against bedrock-agentcore 1.12.0 (verified: it uses the
+# same bedrock_agentcore.tools.code_interpreter_client the old wrapper used).
+strands-agents-tools==0.6.0
+bedrock-agentcore==1.12.0
+mcp==1.27.1
+PyJWT[crypto]==2.13.0
