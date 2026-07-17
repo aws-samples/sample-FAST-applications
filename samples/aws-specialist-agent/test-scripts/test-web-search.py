@@ -14,7 +14,7 @@ test-strands-mcp.py), then:
 No actor-id header is needed: Web Search is not scoped to a user.
 
 Usage:
-    STACK_NAME=fast-aws-specialist uv run test-scripts/test-web-search.py
+    STACK_NAME=fast-specialist-agent uv run test-scripts/test-web-search.py
 """
 
 from __future__ import annotations
@@ -91,7 +91,7 @@ def _is_denied(status: int, body: dict) -> bool:
 
 def main() -> int:
     region = os.environ.get("AWS_REGION", "us-east-1")
-    stack = os.environ.get("STACK_NAME", "fast-aws-specialist")
+    stack = os.environ.get("STACK_NAME", "fast-specialist-agent")
     user_id = os.environ.get("VERIFIED_USER_ID", "web-search-e2e-test-user")
 
     gateway_url = _get_ssm(stack, "gateway_url", region)

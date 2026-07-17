@@ -12,7 +12,7 @@ department (same path as test-aws-mcp-call.py), then:
      error (proves the header, not anything else, carries the identity)
 
 Usage:
-    STACK_NAME=fast-aws-specialist uv run test-scripts/test-ltm-mcp.py
+    STACK_NAME=fast-specialist-agent uv run test-scripts/test-ltm-mcp.py
 """
 
 from __future__ import annotations
@@ -83,7 +83,7 @@ def _tool_call_text(body: dict) -> str:
 
 def main() -> int:
     region = os.environ.get("AWS_REGION", "us-east-1")
-    stack = os.environ.get("STACK_NAME", "fast-aws-specialist")
+    stack = os.environ.get("STACK_NAME", "fast-specialist-agent")
     user_id = os.environ.get("VERIFIED_USER_ID", "ltm-e2e-test-user")
 
     gateway_url = _get_ssm(stack, "gateway_url", region)

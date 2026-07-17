@@ -313,8 +313,8 @@ when {
 Gateway に現在アクティブな Cedar policy を確認するには:
 
 1. **AWS Console → Bedrock AgentCore → Policy** に移動
-2. Policy engines セクションから対象の Policy Engine（例: `fast_aws_specialist_policy_engine`）をクリック
-3. **Policies** セクションで対象のポリシー（例: `fast_aws_specialist_policy_engine_cp_<timestamp>`）をクリック
+2. Policy engines セクションから対象の Policy Engine（例: `fast_specialist_agent_policy_engine`）をクリック
+3. **Policies** セクションで対象のポリシー（例: `fast_specialist_agent_policy_engine_cp_<timestamp>`）をクリック
 4. **Definition** セクションにポリシーの構成要素が表示されます:
    - **Effect**: `permit` または `forbid`
    - **Scope: Principal**: `AgentCore::OAuthUser`
@@ -330,10 +330,10 @@ Gateway に現在アクティブな Cedar policy を確認するには:
 Cedar policy の許可/拒否判定を CloudWatch ログで確認するには:
 
 1. **AWS Console → Bedrock AgentCore → Runtimes** に移動
-2. Runtime resources セクションから対象の runtime（例: `fast_aws_specialist_FASTAgent`）をクリック
+2. Runtime resources セクションから対象の runtime（例: `fast_specialist_agent_FASTAgent`）をクリック
 3. **Tracing** セクションまでスクロールし、**Edit** をクリックして **Enable tracing** を Enable に切り替え
 4. **Bedrock AgentCore → Gateways** に移動
-5. 対象の gateway（例: `fast-aws-specialist-gateway`）をクリックし、**Tracing** までスクロールして **Edit** をクリック、**Enable tracing** を Enable に切り替え
+5. 対象の gateway（例: `fast-specialist-agent-gateway`）をクリックし、**Tracing** までスクロールして **Edit** をクリック、**Enable tracing** を Enable に切り替え
 6. フロントエンドからツール呼び出しをトリガーするクエリを実行
 7. **CloudWatch Console → Log Management → Log groups** に移動
 8. `aws/spans` ロググループを検索してクリックし、デフォルトのログストリームをクリック

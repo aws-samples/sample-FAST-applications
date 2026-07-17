@@ -313,8 +313,8 @@ Both layers are secured by Cognito: the `clientId` is verified through the clien
 To check which Cedar policy is currently active on the Gateway:
 
 1. Go to **AWS Console → Bedrock AgentCore → Policy**
-2. Click on your Policy Engine (e.g., `fast_aws_specialist_policy_engine`) from the Policy engines section
-3. In the **Policies** section, click on your policy (e.g., `fast_aws_specialist_policy_engine_cp_<timestamp>`)
+2. Click on your Policy Engine (e.g., `fast_specialist_agent_policy_engine`) from the Policy engines section
+3. In the **Policies** section, click on your policy (e.g., `fast_specialist_agent_policy_engine_cp_<timestamp>`)
 4. The **Definition** section shows the policy breakdown:
    - **Effect**: `permit` or `forbid`
    - **Scope: Principal**: `AgentCore::OAuthUser`
@@ -330,10 +330,10 @@ Use this to confirm that a `cdk deploy` applied the expected policy version.
 To verify Cedar policy allow/deny decisions in CloudWatch logs:
 
 1. Go to **AWS Console → Bedrock AgentCore → Runtimes**
-2. Click on your runtime (e.g., `fast_aws_specialist_FASTAgent`) from the Runtime resources section
+2. Click on your runtime (e.g., `fast_specialist_agent_FASTAgent`) from the Runtime resources section
 3. Scroll down to **Tracing**, click **Edit**, and toggle **Enable tracing** to Enable
 4. Go to **Bedrock AgentCore → Gateways**
-5. Click on your gateway (e.g., `fast-aws-specialist-gateway`), scroll down to **Tracing**, click **Edit**, and toggle **Enable tracing** to Enable
+5. Click on your gateway (e.g., `fast-specialist-agent-gateway`), scroll down to **Tracing**, click **Edit**, and toggle **Enable tracing** to Enable
 6. Run a query from the frontend that triggers a tool call
 7. Go to **CloudWatch Console → Log Management → Log groups**
 8. Find and click on the `aws/spans` log group, then click on the default log stream

@@ -337,12 +337,21 @@ def _create_policies(
     waiter = client.get_waiter("policy_active")
 
     for index, document in enumerate(policy_documents):
-        # Policy names cap at 48 chars. We use {engine_name}_cp_{ts}_{idx}
-        # which stays within budget for the demo's engine name (~30 chars).
+        # Policy names cap at 48 chars. The `{engine_name}_cp` prefix is a
+        # hard requirement (_delete_managed_policies matches on it), so when
+        # the full `{engine_name}_cp_{ts}_{idx}` name exceeds the cap we
+        # shorten the TIMESTAMP part and always keep the index — truncating
+        # the tail (`policy_name[:48]`) would give every policy the same name
+        # and CreatePolicy fails with ConflictException from the 2nd one.
         policy_name = f"{engine_name}_cp_{timestamp}_{index}"
         if len(policy_name) > 48:
-            # Defensive truncation — we still preserve uniqueness by tail.
-            policy_name = policy_name[:48]
+            prefix = f"{engine_name}_cp_"
+            budget = 48 - len(prefix)
+            tail = f"{timestamp}_{index}"
+            # Keep the end of the tail: the index (uniqueness within this
+            # deploy) plus as many low-order timestamp digits as fit
+            # (uniqueness across earlier failed deploys).
+            policy_name = f"{prefix}{tail[-budget:]}"
 
         logger.info(
             f"Creating Cedar Policy [{index + 1}/{len(policy_documents)}]: "

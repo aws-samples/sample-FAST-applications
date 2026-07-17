@@ -15,7 +15,7 @@ outputs of STACK_NAME; the admin username defaults to the documented admin
 alias and can be overridden with ADMIN_USERNAME.
 
 Usage:
-    STACK_NAME=fast-aws-specialist uv run test-scripts/test-skills-e2e.py
+    STACK_NAME=fast-specialist-agent uv run test-scripts/test-skills-e2e.py
 """
 
 from __future__ import annotations
@@ -102,7 +102,7 @@ def _invoke(
 
 
 def main() -> int:
-    stack_name = os.environ.get("STACK_NAME", "fast-aws-specialist")
+    stack_name = os.environ.get("STACK_NAME", "fast-specialist-agent")
     cfg = get_stack_config(stack_name)
     region: str = cfg["region"]
     outputs: dict[str, str] = cfg["outputs"]

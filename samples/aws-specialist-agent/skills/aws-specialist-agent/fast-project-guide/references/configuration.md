@@ -8,7 +8,7 @@ The overall configuration for CDK deployment. Main keys:
 
 | Key                                     | Meaning                                                     | Current demo value (confirm against the actual file) |
 | --------------------------------------- | ----------------------------------------------------------- | ---------------------------------------------------- |
-| stack_name_base                         | Base for the stack name                                     | fast-aws-specialist                                  |
+| stack_name_base                         | Base for the stack name                                     | fast-specialist-agent                                |
 | admin_user_email                        | Admin user email (automatically added to the finance group) | Placeholder                                          |
 | backend.pattern                         | Agent pattern to deploy                                     | strands-single-agent                                 |
 | backend.deployment_type                 | docker (ECR image) or zip                                   | docker                                               |

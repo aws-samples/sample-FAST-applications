@@ -73,7 +73,7 @@ def _post_jsonrpc(gateway_url: str, token: str, payload: dict) -> tuple[int, dic
 
 def main() -> int:
     region = os.environ.get("AWS_REGION", "us-east-1")
-    stack = os.environ.get("STACK_NAME", "fast-aws-specialist")
+    stack = os.environ.get("STACK_NAME", "fast-specialist-agent")
 
     params = {
         "gateway_url": _get_ssm(stack, "gateway_url", region),
