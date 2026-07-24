@@ -1,0 +1,27 @@
+{
+  "name": "fast-cdk",
+  "version": "0.4.2",
+  "bin": {
+    "fast-cdk": "bin/fast-cdk.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.0",
+    "aws-cdk": "^2.1131.0",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.9.3"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-amplify-alpha": "^2.261.0-alpha.0",
+    "@aws-cdk/aws-lambda-python-alpha": "^2.261.0-alpha.0",
+    "@aws-sdk/client-bedrock-agentcore": "^3.1076.0",
+    "@cdklabs/generative-ai-cdk-constructs": "^0.1.318",
+    "aws-cdk-lib": "^2.261.0",
+    "constructs": "^10.6.0",
+    "yaml": "^2.9.0"
+  }
+}
