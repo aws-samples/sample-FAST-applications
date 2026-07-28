@@ -1,6 +1,6 @@
 # Strands Swarm Agent Dependencies with pinned versions
 strands-agents==1.16.0
 mcp==1.23.1
-bedrock-agentcore[strands-agents]==1.0.6
+bedrock-agentcore[strands-agents]==1.18.1
 boto3==1.40.52
 requests==2.33.0
