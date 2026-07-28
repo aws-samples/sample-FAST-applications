@@ -25,7 +25,7 @@
     "@aws-cdk/aws-bedrock-alpha": "^2.233.0-alpha.0",
     "@aws-cdk/aws-lambda-python-alpha": "^2.233.0-alpha.0",
     "@aws-sdk/client-bedrock-agentcore": "^3.918.0",
-    "aws-cdk-lib": "^2.233.0",
+    "aws-cdk-lib": "^2.262.1",
     "constructs": "^10.0.0",
     "express-rate-limit": "^8.3.2",
     "flatted": "^3.4.2",
