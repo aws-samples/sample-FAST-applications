@@ -16,6 +16,7 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 
 | Sample | Description |
 |--------|-------------|
+| [Meridian Risk](#meridian-risk) | Governed multi-agent KYC onboarding — one Gateway fronts both tools (MCP) and models (inference), enforced by Cedar Policy, with a managed Harness, Guardrails, and OpenTelemetry observability |
 | [Restaurant Assistant](#restaurant-assistant) | Knowledge base integration, reservation management, and customer-facing chat widget |
 | [CopilotKit Generative UI](#copilotkit-generative-ui) | Generative UI, shared state, and human-in-the-loop interactions via CopilotKit |
 | [LLM Council](#llm-council) | An implementation of "Council of LLMs" pattern on AWS. Builds consensus among multiple diverse LLMs.|
@@ -23,6 +24,24 @@ While [FAST](https://github.com/awslabs/fullstack-solution-template-for-agentcor
 | [AgentCore AWS Specialist Agent](#agentcore-aws-specialist-agent) | AWS specialist chat agent with Gateway MCP tools, long-term memory, web search, Skills on Runtime, and a NAT-free VPC |
 
 <!-- Add new samples to the table above as they are added -->
+
+### [Meridian Risk](samples/meridian-risk/)
+**Description**: A governed multi-agent KYC onboarding desk on Amazon Bedrock AgentCore. A Credit Analyst and a Compliance Officer run concurrently against the Gateway's KYC tools, then a supervisor synthesizes one auditable APPROVE / REJECT / ESCALATE decision. The emphasis is platform governance — proving an agent was only ever allowed to call the tools it was scoped to.
+
+**Built on FAST**: v0.4.2
+
+**Key Differences from FAST**: Uses six AgentCore services together — Runtime (a Strands multi-agent workflow: two specialists in parallel, then synthesis), Gateway as a single governed ingress fronting both the five KYC tools (MCP target) and Bedrock models (inference target — the "LLM-gateway" pattern), Policy (Cedar authorization enforced server-side on every request in ENFORCE mode), Memory (per-customer assessment history), Agent Registry (governed catalog with a DRAFT → APPROVED workflow), and a managed Harness (the same assistant expressed as configuration). Also adds Bedrock Guardrails and ADOT/OpenTelemetry observability (traces and spans in CloudWatch Transaction Search).
+
+**Use Case**: Governed, auditable multi-agent workflows in regulated domains (financial services, KYC/AML) that must prove per-request tool authorization and route both tool and model traffic through a single control point.
+
+<div align="center">
+<img src="samples/meridian-risk/docs/assets/console-light.png" alt="Meridian Risk console — assessment view, light theme" width="48%" />
+<img src="samples/meridian-risk/docs/assets/console-dark.png" alt="Meridian Risk console — assessment view, dark theme" width="48%" />
+</div>
+
+<div align="center">
+<img src="samples/meridian-risk/docs/assets/architecture.png" alt="Meridian Risk architecture: a single AgentCore Gateway fronts both the KYC tools (MCP target) and Bedrock models (inference target); a Runtime orchestrator runs a Credit Analyst and Compliance Officer in parallel, a managed Harness is the declarative counterpart, AgentCore Policy enforces Cedar authorization on every request, Memory holds per-customer history, Agent Registry the governed catalog, and OpenTelemetry traces flow to CloudWatch" width="100%" />
+</div>
 
 ### [Restaurant Assistant](samples/restaurant-assistant)
 **Description**: A restaurant assistant application with knowledge base integration, reservation management, and a professional customer-facing interface.
