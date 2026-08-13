@@ -1,6 +1,6 @@
 # Pinned to the versions validated by fullstack-solution-template-for-agentcore.
 strands-agents==1.32.0
-bedrock-agentcore==1.4.7
+bedrock-agentcore==1.18.1
 mcp==1.28.1
 boto3>=1.40.0
 # Used directly for the Gateway's per-request SigV4 signing hook.
