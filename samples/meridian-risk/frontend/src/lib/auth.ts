@@ -67,7 +67,9 @@ export async function signIn(
   const body = await response.json().catch(() => ({}))
 
   if (!response.ok) {
-    const code = String(body?.__type ?? "").split("#").pop()
+    const code = String(body?.__type ?? "")
+      .split("#")
+      .pop()
     // Cognito's raw messages leak internals; map the common ones.
     const message =
       code === "NotAuthorizedException"

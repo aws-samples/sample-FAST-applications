@@ -12,7 +12,6 @@ import logging
 import os
 
 from bedrock_agentcore.runtime import BedrockAgentCoreApp
-
 from orchestrator import KYCOrchestrator
 
 logging.basicConfig(

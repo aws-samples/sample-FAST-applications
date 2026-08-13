@@ -61,9 +61,8 @@ export function LoginView({ config, onSignedIn, theme, onThemeChange }: Props) {
             <em>underwritten by agents.</em>
           </h1>
           <p className="login-blurb">
-            Credit analysis and AML compliance screening run in parallel against
-            a governed tool catalog, then synthesize a single, auditable
-            onboarding decision.
+            Credit analysis and AML compliance screening run in parallel against a governed tool
+            catalog, then synthesize a single, auditable onboarding decision.
           </p>
 
           <dl className="login-stack">
@@ -101,9 +100,7 @@ export function LoginView({ config, onSignedIn, theme, onThemeChange }: Props) {
             </div>
           </dl>
 
-          <div className="login-foot">
-            Amazon Bedrock AgentCore · {config.region}
-          </div>
+          <div className="login-foot">Amazon Bedrock AgentCore · {config.region}</div>
         </div>
       </aside>
 
@@ -117,8 +114,7 @@ export function LoginView({ config, onSignedIn, theme, onThemeChange }: Props) {
           <div className="eyebrow">Risk desk access</div>
           <h2 className="login-title">Sign in</h2>
           <p className="login-sub">
-            Authenticate with your Amazon Cognito credentials to reach the
-            onboarding desk.
+            Authenticate with your Amazon Cognito credentials to reach the onboarding desk.
           </p>
 
           <label className="field">
@@ -128,7 +124,7 @@ export function LoginView({ config, onSignedIn, theme, onThemeChange }: Props) {
               autoComplete="username"
               autoFocus
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={event => setEmail(event.target.value)}
               disabled={busy}
               placeholder="you@example.com"
             />
@@ -140,7 +136,7 @@ export function LoginView({ config, onSignedIn, theme, onThemeChange }: Props) {
               type="password"
               autoComplete="current-password"
               value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={event => setPassword(event.target.value)}
               disabled={busy}
               placeholder="••••••••••••"
             />
@@ -157,8 +153,8 @@ export function LoginView({ config, onSignedIn, theme, onThemeChange }: Props) {
           </button>
 
           <div className="login-note">
-            Sessions last 8 hours and are cleared when this tab closes.
-            Synthetic data only — no real customer records.
+            Sessions last 8 hours and are cleared when this tab closes. Synthetic data only — no
+            real customer records.
           </div>
         </form>
       </main>

@@ -24,6 +24,7 @@ Doubles as the skill smoke test: it prints the tools the loop called (look for
 Requires a boto3 new enough to know invoke_harness and the s3 skill source
 (the version in scripts/bootstrap.sh's venv); the system boto3 is usually older.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -81,7 +82,7 @@ def invoke(region: str, harness_arn: str, s3_uri: str, prompt: str) -> int:
                 tool_events.append(blob)
             if '"text"' in blob:
                 text_events.append(event)
-    except Exception as exc:  # EventStreamError et al.
+    except Exception as exc:  # noqa: BLE001 — EventStreamError et al.; surface and exit
         print(f"[harness-skill] stream error: {str(exc)[:400]}", file=sys.stderr)
         return 1
 
@@ -98,7 +99,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--region", required=True)
     parser.add_argument("--harness-arn", required=True)
-    parser.add_argument("--s3-uri", required=True, help="s3://bucket/prefix/ of the skill")
+    parser.add_argument(
+        "--s3-uri", required=True, help="s3://bucket/prefix/ of the skill"
+    )
     parser.add_argument(
         "--prompt",
         default=(

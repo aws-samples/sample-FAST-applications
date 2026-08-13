@@ -21,12 +21,12 @@ export function GatewayView({ customers }: Props) {
   useEffect(() => {
     api
       .gatewayTools()
-      .then((data) => {
+      .then(data => {
         setInfo(data)
-        const first = data.targets.flatMap((t) => t.tools)[0]
+        const first = data.targets.flatMap(t => t.tools)[0]
         if (first) setSelected(first)
       })
-      .catch((exc) => setError((exc as Error).message))
+      .catch(exc => setError((exc as Error).message))
   }, [])
 
   const invoke = async () => {
@@ -44,7 +44,7 @@ export function GatewayView({ customers }: Props) {
     }
   }
 
-  const tools = info?.targets.flatMap((t) => t.tools) ?? []
+  const tools = info?.targets.flatMap(t => t.tools) ?? []
 
   return (
     <>
@@ -52,13 +52,17 @@ export function GatewayView({ customers }: Props) {
         <div className="eyebrow">AgentCore Gateway</div>
         <h2>KYC tool catalog over MCP</h2>
         <p>
-          One Lambda target, five tools, exposed to the agents as an MCP server.
-          Inbound authorization is AWS IAM, so the Runtime's execution role
-          signs each call with SigV4 — no bearer tokens or secrets to manage.
+          One Lambda target, five tools, exposed to the agents as an MCP server. Inbound
+          authorization is AWS IAM, so the Runtime's execution role signs each call with SigV4 — no
+          bearer tokens or secrets to manage.
         </p>
       </div>
 
-      {error && <div className="error" style={{ marginBottom: 14 }}>{error}</div>}
+      {error && (
+        <div className="error" style={{ marginBottom: 14 }}>
+          {error}
+        </div>
+      )}
 
       {info && (
         <div className="panel" style={{ marginBottom: 20 }}>
@@ -86,9 +90,7 @@ export function GatewayView({ customers }: Props) {
                         {target.kind && (
                           <span
                             className={
-                              target.kind === "inference"
-                                ? "chip chip-amber"
-                                : "chip chip-tool"
+                              target.kind === "inference" ? "chip chip-amber" : "chip chip-tool"
                             }
                             style={{ marginLeft: 6 }}
                             title={
@@ -120,7 +122,7 @@ export function GatewayView({ customers }: Props) {
             {tools.length === 0 ? (
               <div className="muted">Loading tool catalog…</div>
             ) : (
-              tools.map((tool) => (
+              tools.map(tool => (
                 <button
                   key={tool.name}
                   className="tool"
@@ -149,22 +151,15 @@ export function GatewayView({ customers }: Props) {
             <div className="panel-body">
               <label className="field">
                 <span className="field-label">customer_id</span>
-                <select
-                  value={customerId}
-                  onChange={(event) => setCustomerId(event.target.value)}
-                >
-                  {customers.map((customer) => (
+                <select value={customerId} onChange={event => setCustomerId(event.target.value)}>
+                  {customers.map(customer => (
                     <option key={customer.id} value={customer.id}>
                       {customer.id} — {customer.name}
                     </option>
                   ))}
                 </select>
               </label>
-              <button
-                className="btn"
-                onClick={() => void invoke()}
-                disabled={busy || !selected}
-              >
+              <button className="btn" onClick={() => void invoke()} disabled={busy || !selected}>
                 {busy ? "Invoking…" : "Invoke tool"}
               </button>
             </div>
@@ -176,9 +171,7 @@ export function GatewayView({ customers }: Props) {
                 <span className="panel-title">Input schema</span>
               </div>
               <div className="panel-body">
-                <pre className="json">
-                  {JSON.stringify(selected.inputSchema, null, 2)}
-                </pre>
+                <pre className="json">{JSON.stringify(selected.inputSchema, null, 2)}</pre>
               </div>
             </div>
           )}

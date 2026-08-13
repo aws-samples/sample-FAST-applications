@@ -29,7 +29,9 @@ body {
   font-size: 14px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 
   /*
    * Faint 48px grid: the only tiling layer, and it tiles seamlessly because a
@@ -163,7 +165,10 @@ pre {
   letter-spacing: 0.09em;
   text-transform: uppercase;
   padding: 15px 20px 13px;
-  transition: color 0.16s, border-color 0.16s, background 0.16s;
+  transition:
+    color 0.16s,
+    border-color 0.16s,
+    background 0.16s;
   white-space: nowrap;
   display: flex;
   align-items: center;
@@ -294,7 +299,10 @@ main {
   color: inherit;
   cursor: pointer;
   padding: 13px 15px;
-  transition: border-color 0.16s, background 0.16s, transform 0.16s;
+  transition:
+    border-color 0.16s,
+    background 0.16s,
+    transform 0.16s;
 }
 
 .customer + .customer {
@@ -392,7 +400,9 @@ textarea {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 11px 18px;
-  transition: filter 0.16s, transform 0.1s;
+  transition:
+    filter 0.16s,
+    transform 0.1s;
   width: 100%;
 }
 
@@ -702,7 +712,9 @@ textarea {
   background: var(--ink-750);
   padding: 13px 15px;
   cursor: pointer;
-  transition: border-color 0.16s, background 0.16s;
+  transition:
+    border-color 0.16s,
+    background 0.16s;
 }
 
 .tool + .tool {

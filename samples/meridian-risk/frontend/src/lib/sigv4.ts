@@ -23,22 +23,18 @@ export interface AwsCredentials {
 const encoder = new TextEncoder()
 
 async function sha256Hex(data: string | ArrayBuffer): Promise<string> {
-  const buffer =
-    typeof data === "string" ? encoder.encode(data) : new Uint8Array(data)
+  const buffer = typeof data === "string" ? encoder.encode(data) : new Uint8Array(data)
   const digest = await crypto.subtle.digest("SHA-256", buffer)
   return hex(digest)
 }
 
 function hex(buffer: ArrayBuffer): string {
   return Array.from(new Uint8Array(buffer))
-    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .map(byte => byte.toString(16).padStart(2, "0"))
     .join("")
 }
 
-async function hmac(
-  key: ArrayBuffer | Uint8Array,
-  message: string
-): Promise<ArrayBuffer> {
+async function hmac(key: ArrayBuffer | Uint8Array, message: string): Promise<ArrayBuffer> {
   const cryptoKey = await crypto.subtle.importKey(
     "raw",
     key as ArrayBuffer,
@@ -101,17 +97,13 @@ export async function signRequest(
   }
   const signedHeaders = Object.keys(headers).sort()
 
-  const canonicalHeaders =
-    signedHeaders.map((name) => `${name}:${headers[name]}\n`).join("") // trailing \n per header
+  const canonicalHeaders = signedHeaders.map(name => `${name}:${headers[name]}\n`).join("") // trailing \n per header
 
   // Query parameters must be sorted by name, and both name and value
   // RFC3986-encoded.
   const canonicalQuery = [...target.searchParams.entries()]
     .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
-    .map(
-      ([name, value]) =>
-        `${encodeURIComponent(name)}=${encodeURIComponent(value)}`
-    )
+    .map(([name, value]) => `${encodeURIComponent(name)}=${encodeURIComponent(value)}`)
     .join("&")
 
   const canonicalRequest = [
@@ -124,19 +116,11 @@ export async function signRequest(
   ].join("\n")
 
   const scope = `${dateStamp}/${region}/${service}/aws4_request`
-  const stringToSign = [
-    "AWS4-HMAC-SHA256",
-    amzDate,
-    scope,
-    await sha256Hex(canonicalRequest),
-  ].join("\n")
-
-  const key = await signingKey(
-    credentials.secretAccessKey,
-    dateStamp,
-    region,
-    service
+  const stringToSign = ["AWS4-HMAC-SHA256", amzDate, scope, await sha256Hex(canonicalRequest)].join(
+    "\n"
   )
+
+  const key = await signingKey(credentials.secretAccessKey, dateStamp, region, service)
   const signature = hex(await hmac(key, stringToSign))
 
   return {

@@ -18,6 +18,7 @@ IAM role does the InvokeModel call; the caller only needs InvokeGateway.
 That is the demo's punch line: one governed endpoint, one guardrail,
 one audit trail, for both tools and models.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -78,7 +79,9 @@ def _wait_until_gone(
     )
 
 
-def _configuration(guardrail_arn: str | None, guardrail_version: str | None) -> dict[str, Any]:
+def _configuration(
+    guardrail_arn: str | None, guardrail_version: str | None
+) -> dict[str, Any]:
     """Build the create/update payload.
 
     Just the connector id and the IAM outbound credential provider.

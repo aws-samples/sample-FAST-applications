@@ -52,7 +52,7 @@ const NODES: Node[] = [
     label: "Cognito user pool",
     service: "Amazon Cognito",
     layer: "auth",
-    detail: (config) => config.user_pool_id || "not configured",
+    detail: config => config.user_pool_id || "not configured",
     what: "Authenticates the operator and issues an 8-hour ID token, then federates it into temporary IAM credentials scoped to invoking this one API.",
     calls: ["InitiateAuth", "GetId", "GetCredentialsForIdentity"],
     source: "frontend/src/lib/auth.ts · frontend/src/lib/credentials.ts · infra/cognito.tf",
@@ -75,7 +75,7 @@ const NODES: Node[] = [
     label: "KYC orchestrator",
     service: "AgentCore Runtime",
     layer: "agent",
-    detail: (config) => config.runtime_arn.split("/").pop() ?? "",
+    detail: config => config.runtime_arn.split("/").pop() ?? "",
     what: "ARM64 container running a Strands multi-agent workflow. Recalls history, runs both specialists concurrently, synthesizes the verdict, and persists it.",
     calls: ["InvokeAgentRuntime"],
     source: "backend/agent/kyc_agent.py · backend/agent/orchestrator.py",
@@ -87,7 +87,7 @@ const NODES: Node[] = [
     label: "Managed agent loop",
     service: "AgentCore Harness",
     layer: "agent",
-    detail: (config) => config.harness_id || "not deployed",
+    detail: config => config.harness_id || "not deployed",
     what: "The same KYC assistant expressed as configuration instead of code: a managed agent loop declaring a model, a system prompt, the shared Gateway as its tool, managed memory, and an S3 agent skill. AgentCore runs the orchestration, tool execution, memory, and observability in an isolated microVM per session.",
     calls: ["InvokeHarness"],
     source: "infra/harness.tf · backend/harness/skills/kyc-onboarding-assessment/SKILL.md",
@@ -126,7 +126,7 @@ const NODES: Node[] = [
     label: "KYC tool gateway",
     service: "AgentCore Gateway",
     layer: "data",
-    detail: (config) => config.gateway_id || "",
+    detail: config => config.gateway_id || "",
     what: "Exposes five KYC data tools to the agents as an MCP server, backed by one Lambda target.",
     calls: ["MCP tools/list", "MCP tools/call"],
     source: "backend/agent/lib/gateway.py · infra/gateway.tf",
@@ -149,7 +149,7 @@ const NODES: Node[] = [
     label: "Assessment history",
     service: "AgentCore Memory",
     layer: "data",
-    detail: (config) => config.memory_id || "",
+    detail: config => config.memory_id || "",
     what: "Stores each verdict and extracts long-term facts. Scoped per corporate customer, so any reviewer sees the same history.",
     calls: ["CreateEvent", "RetrieveMemoryRecords", "ListEvents"],
     source: "backend/agent/lib/memory.py · infra/memory.tf",
@@ -161,7 +161,7 @@ const NODES: Node[] = [
     label: "Resource catalog",
     service: "AgentCore Registry",
     layer: "data",
-    detail: (config) => config.registry_id || "",
+    detail: config => config.registry_id || "",
     what: "Governed catalog of this platform's MCP server, agent card, and two agent skills. Records must be APPROVED before they are discoverable.",
     calls: ["SearchRegistryRecords", "ListRegistryRecords", "UpdateRegistryRecordStatus"],
     source: "scripts/seed_registry.py · infra/registry.tf",
@@ -173,13 +173,14 @@ const NODES: Node[] = [
     label: "LLM inference gateway",
     service: "AgentCore Gateway · inference target",
     layer: "data",
-    detail: (config) =>
+    detail: config =>
       config.inference_route === "gateway"
         ? `${config.gateway_id || ""} · /inference/v1`
         : `direct (route=${config.inference_route})`,
     what: "Same Gateway, second target: a Bedrock Mantle inference connector. The runtime uses the OpenAI SDK against /inference/v1 — the Gateway SigV4-forwards to Bedrock under its own role, so the runtime never holds Bedrock credentials.",
     calls: ["POST /inference/v1/chat/completions", "Bedrock InvokeModel (server-side)"],
-    source: "backend/agent/lib/inference.py · infra/gateway.tf · scripts/manage_inference_target.py",
+    source:
+      "backend/agent/lib/inference.py · infra/gateway.tf · scripts/manage_inference_target.py",
     decision:
       "Two targets under one gateway (tools + inference) means one governed ingress, one credential broker, and one audit trail across every LLM call — regardless of upstream provider. A guardrail rail over the same path is the intended next step, bound through AgentCore Policy (see the guardrail node). Flip INFERENCE_ROUTE to 'direct' to prove the same code path also works against Bedrock directly.",
   },
@@ -188,7 +189,7 @@ const NODES: Node[] = [
     label: "Cedar authorization",
     service: "AgentCore Policy",
     layer: "data",
-    detail: (config) =>
+    detail: config =>
       config.policy_engine_id
         ? `${config.policy_mode} · ${config.policy_engine_id}`
         : "not configured",
@@ -203,7 +204,7 @@ const NODES: Node[] = [
     label: "PII + prompt-injection rail",
     service: "Bedrock Guardrails",
     layer: "data",
-    detail: (config) =>
+    detail: config =>
       config.guardrail_id
         ? `${config.guardrail_id} v${config.guardrail_version}`
         : "not configured",
@@ -267,7 +268,7 @@ const LIFECYCLE: { step: string; title: string; body: string }[] = [
 
 export function ArchitectureView({ config }: Props) {
   const [selectedId, setSelectedId] = useState("runtime")
-  const selected = NODES.find((node) => node.id === selectedId) ?? NODES[0]
+  const selected = NODES.find(node => node.id === selectedId) ?? NODES[0]
 
   return (
     <>
@@ -275,9 +276,8 @@ export function ArchitectureView({ config }: Props) {
         <div className="eyebrow">How it works</div>
         <h2>Request lifecycle, end to end</h2>
         <p>
-          Every box below is a real deployed resource. Select one to see what it
-          does, which AWS APIs it calls, where it is implemented, and why it was
-          built that way.
+          Every box below is a real deployed resource. Select one to see what it does, which AWS
+          APIs it calls, where it is implemented, and why it was built that way.
         </p>
       </div>
 
@@ -295,7 +295,7 @@ export function ArchitectureView({ config }: Props) {
                   <span className="arch-layer-caption">{layer.caption}</span>
                 </div>
                 <div className="arch-row">
-                  {NODES.filter((node) => node.layer === layer.id).map((node) => (
+                  {NODES.filter(node => node.layer === layer.id).map(node => (
                     <button
                       key={node.id}
                       className="arch-node"
@@ -305,9 +305,7 @@ export function ArchitectureView({ config }: Props) {
                       <span className="arch-node-service">{node.service}</span>
                       <span className="arch-node-label">{node.label}</span>
                       {node.detail && (
-                        <span className="arch-node-detail mono">
-                          {node.detail(config)}
-                        </span>
+                        <span className="arch-node-detail mono">{node.detail(config)}</span>
                       )}
                     </button>
                   ))}
@@ -334,7 +332,7 @@ export function ArchitectureView({ config }: Props) {
               <div>
                 <span className="field-label">Calls</span>
                 <div className="chip-row">
-                  {selected.calls.map((call) => (
+                  {selected.calls.map(call => (
                     <span key={call} className="chip chip-tool mono">
                       {call}
                     </span>
@@ -364,7 +362,7 @@ export function ArchitectureView({ config }: Props) {
             </div>
             <div className="panel-body">
               <ol className="lifecycle">
-                {LIFECYCLE.map((entry) => (
+                {LIFECYCLE.map(entry => (
                   <li key={entry.step}>
                     <span className="lifecycle-step mono">{entry.step}</span>
                     <div>

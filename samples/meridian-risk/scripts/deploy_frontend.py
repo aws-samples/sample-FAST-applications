@@ -43,7 +43,9 @@ def log(message: str) -> None:
 def run(command: list[str], cwd: pathlib.Path) -> None:
     """Run a subprocess, surfacing its output on failure."""
     # nosemgrep: dangerous-subprocess-use-audit — list-form (no shell); only ever called with the static npm commands below
-    result = subprocess.run(command, cwd=cwd, capture_output=True, text=True)  # noqa: S603
+    result = subprocess.run(
+        command, cwd=cwd, capture_output=True, text=True, check=False
+    )
     if result.returncode != 0:
         log(f"command failed: {' '.join(command)}")
         sys.stderr.write(result.stdout[-4000:])
@@ -101,7 +103,7 @@ def deploy(client, app_id: str, branch: str, archive: pathlib.Path) -> str:
         headers={"Content-Type": "application/zip"},
     )
     # nosec B310 — the URL is an AWS-issued presigned S3 URL.
-    with urllib.request.urlopen(request, timeout=300) as response:  # noqa: S310
+    with urllib.request.urlopen(request, timeout=300) as response:
         if response.status not in (200, 204):
             log(f"ERROR: upload returned HTTP {response.status}")
             raise SystemExit(1)
@@ -120,9 +122,9 @@ def wait(client, app_id: str, branch: str, job_id: str) -> str:
     status = "PENDING"
 
     while time.time() < deadline:
-        status = client.get_job(appId=app_id, branchName=branch, jobId=job_id)[
-            "job"
-        ]["summary"]["status"]
+        status = client.get_job(appId=app_id, branchName=branch, jobId=job_id)["job"][
+            "summary"
+        ]["status"]
         if status in ("SUCCEED", "FAILED", "CANCELLED"):
             return status
         # nosemgrep: arbitrary-sleep — poll interval inside a bounded deployment wait

@@ -106,7 +106,14 @@ def build_record(region: str, runtime_arn: str, token_url: str) -> dict:
                     "Assess a prospective corporate banking customer and return a "
                     "risk score with an onboarding recommendation."
                 ),
-                "tags": ["kyc", "aml", "credit-risk", "onboarding", "compliance", "oauth"],
+                "tags": [
+                    "kyc",
+                    "aml",
+                    "credit-risk",
+                    "onboarding",
+                    "compliance",
+                    "oauth",
+                ],
                 "examples": [
                     "Assess CUST001 for corporate onboarding",
                     "Run a compliance-only review of CUST003",
@@ -124,7 +131,9 @@ def build_record(region: str, runtime_arn: str, token_url: str) -> dict:
             "Discover it, then call the agent directly with an OAuth bearer token."
         ),
         "descriptorType": "A2A",
-        "descriptors": {"a2a": {"agentCard": {"inlineContent": json.dumps(agent_card)}}},
+        "descriptors": {
+            "a2a": {"agentCard": {"inlineContent": json.dumps(agent_card)}}
+        },
     }
 
 
@@ -150,9 +159,9 @@ def wait_for_terminal(client, registry_id: str, record_id: str) -> str:
     deadline = time.time() + POLL_TIMEOUT_SECONDS
     status = "UNKNOWN"
     while time.time() < deadline:
-        status = client.get_registry_record(
-            registryId=registry_id, recordId=record_id
-        )["status"]
+        status = client.get_registry_record(registryId=registry_id, recordId=record_id)[
+            "status"
+        ]
         if status in TERMINAL_STATUSES:
             return status
         # nosemgrep: arbitrary-sleep — poll interval inside a bounded status wait
@@ -194,9 +203,7 @@ def delete(client, registry_id: str) -> int:
     if not existing:
         log(f"{RECORD_NAME}: not present, nothing to delete")
         return 0
-    client.delete_registry_record(
-        registryId=registry_id, recordId=existing["recordId"]
-    )
+    client.delete_registry_record(registryId=registry_id, recordId=existing["recordId"])
     log(f"{RECORD_NAME}: deleted ({existing['recordId']})")
     return 0
 

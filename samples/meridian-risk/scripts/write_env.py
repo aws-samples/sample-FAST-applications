@@ -84,9 +84,7 @@ def main() -> int:
     # credential on disk — which is exactly what this file's docstring promises
     # it does not do.
     safe_outputs = {name: outputs[name] for name in EXPORTS}
-    (REPO / "infra-outputs.json").write_text(
-        json.dumps(safe_outputs, indent=2) + "\n"
-    )
+    (REPO / "infra-outputs.json").write_text(json.dumps(safe_outputs, indent=2) + "\n")
     print(f"wrote {REPO / 'infra-outputs.json'}")
 
     print("\nDeployed resources:")

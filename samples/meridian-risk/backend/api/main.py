@@ -24,15 +24,14 @@ import logging
 import os
 from typing import Any
 
-from fastapi import Depends, FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
 import routers_config
 import routers_gateway
 import routers_memory
 import routers_registry
 import routers_runtime
 from auth import verify_request
+from fastapi import Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

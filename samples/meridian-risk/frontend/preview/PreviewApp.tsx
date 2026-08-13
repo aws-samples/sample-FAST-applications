@@ -58,7 +58,7 @@ export default function PreviewApp() {
     }
   }, [palette, mode])
 
-  const active = PALETTES.find((entry) => entry.id === palette)!
+  const active = PALETTES.find(entry => entry.id === palette)!
 
   return (
     <>
@@ -67,7 +67,7 @@ export default function PreviewApp() {
       <div className="pv-bar">
         <strong>Palette</strong>
         <div className="pv-group">
-          {PALETTES.map((entry) => (
+          {PALETTES.map(entry => (
             <button
               key={entry.id}
               className="pv-btn"
@@ -85,7 +85,7 @@ export default function PreviewApp() {
         </div>
 
         <div className="pv-swatches" aria-hidden="true">
-          {active.swatches.map((colour) => (
+          {active.swatches.map(colour => (
             <span
               key={colour}
               className="pv-swatch"
@@ -97,7 +97,7 @@ export default function PreviewApp() {
 
         <strong>Mode</strong>
         <div className="pv-group">
-          {(["light", "dark"] as Mode[]).map((entry) => (
+          {(["light", "dark"] as Mode[]).map(entry => (
             <button
               key={entry}
               className="pv-btn"
@@ -110,9 +110,7 @@ export default function PreviewApp() {
         </div>
 
         <span className="pv-note">
-          {mode === "dark"
-            ? "dark theme — unchanged by palette choice"
-            : active.blurb}
+          {mode === "dark" ? "dark theme — unchanged by palette choice" : active.blurb}
         </span>
       </div>
     </>

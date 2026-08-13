@@ -45,7 +45,9 @@ def tf_output(name: str) -> dict:
     )
     data = json.loads(raw)
     if not data:
-        raise SystemExit(f"{name} output is null — deploy with -var enable_registry_oauth_demo=true")
+        raise SystemExit(
+            f"{name} output is null — deploy with -var enable_registry_oauth_demo=true"
+        )
     return data
 
 
@@ -66,12 +68,16 @@ def search(url: str, registry_arn: str, token: str | None) -> tuple[int, dict | 
     headers = {"Content-Type": "application/json"}
     if token:
         headers["Authorization"] = f"Bearer {token}"
-    body = {"searchQuery": SEARCH_QUERY, "registryIds": [registry_arn], "maxResults": 10}
+    body = {
+        "searchQuery": SEARCH_QUERY,
+        "registryIds": [registry_arn],
+        "maxResults": 10,
+    }
     request = urllib.request.Request(
         url, data=json.dumps(body).encode(), headers=headers, method="POST"
     )
     try:
-        with urllib.request.urlopen(request, timeout=60) as resp:  # noqa: S310
+        with urllib.request.urlopen(request, timeout=60) as resp:
             return resp.status, json.loads(resp.read().decode())
     except urllib.error.HTTPError as exc:
         return exc.code, exc.read().decode()
@@ -88,9 +94,9 @@ def main() -> int:
     dp = session.client("bedrock-agentcore", region_name=region)
 
     log("minting M2M OAuth token via AgentCore Identity…")
-    workload_token = dp.get_workload_access_token(
-        workloadName=wiring["workload_name"]
-    )["workloadAccessToken"]
+    workload_token = dp.get_workload_access_token(workloadName=wiring["workload_name"])[
+        "workloadAccessToken"
+    ]
     access_token = dp.get_resource_oauth2_token(
         workloadIdentityToken=workload_token,
         resourceCredentialProviderName=wiring["provider_name"],

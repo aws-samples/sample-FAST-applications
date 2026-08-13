@@ -6,10 +6,9 @@
 import logging
 from typing import Any
 
+import aws
 from botocore.exceptions import ClientError
 from fastapi import APIRouter, HTTPException
-
-import aws
 from models import SearchRequest, StatusRequest
 
 logger = logging.getLogger(__name__)

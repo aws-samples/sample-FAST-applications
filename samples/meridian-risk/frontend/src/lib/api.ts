@@ -220,13 +220,7 @@ async function buildHeaders(
   if (!token) throw new UnauthorizedError("Not signed in")
 
   const credentials = await getCredentials(signingConfig, token)
-  const signed = await signRequest(
-    method,
-    url(path),
-    body,
-    credentials,
-    signingConfig.region
-  )
+  const signed = await signRequest(method, url(path), body, credentials, signingConfig.region)
   return { ...signed, "X-Id-Token": token }
 }
 
@@ -238,9 +232,7 @@ async function failure(response: Response): Promise<Error> {
   } catch {
     /* non-JSON error body; keep the status line */
   }
-  return response.status === 401
-    ? new UnauthorizedError(detail)
-    : new Error(detail)
+  return response.status === 401 ? new UnauthorizedError(detail) : new Error(detail)
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -268,10 +260,10 @@ export const api = {
     ),
 
   registrySearch: (query: string) =>
-    request<{ query: string; count: number; records: RegistryRecord[] }>(
-      "/api/registry/search",
-      { method: "POST", body: JSON.stringify({ query, max_results: 10 }) }
-    ),
+    request<{ query: string; count: number; records: RegistryRecord[] }>("/api/registry/search", {
+      method: "POST",
+      body: JSON.stringify({ query, max_results: 10 }),
+    }),
 
   setRecordStatus: (recordId: string, status: string, reason: string) =>
     request<RegistryRecord>(`/api/registry/records/${recordId}/status`, {
@@ -282,16 +274,12 @@ export const api = {
   gatewayTools: () => request<GatewayInfo>("/api/gateway/tools"),
 
   invokeTool: (toolName: string, customerId: string) =>
-    request<{ tool: string; customer_id: string; result: any }>(
-      "/api/gateway/invoke",
-      {
-        method: "POST",
-        body: JSON.stringify({ tool_name: toolName, customer_id: customerId }),
-      }
-    ),
+    request<{ tool: string; customer_id: string; result: any }>("/api/gateway/invoke", {
+      method: "POST",
+      body: JSON.stringify({ tool_name: toolName, customer_id: customerId }),
+    }),
 
-  memory: (customerId: string) =>
-    request<MemoryView>(`/api/memory/${customerId}`),
+  memory: (customerId: string) => request<MemoryView>(`/api/memory/${customerId}`),
 }
 
 /**

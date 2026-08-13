@@ -139,7 +139,7 @@ const ASSESSMENTS: Record<string, Record<string, unknown>> = {
         "gateway_kyc-tools___adverse_media_scan",
       ],
     },
-    tools_invoked: TOOL_NAMES.map((n) => `gateway_kyc-tools___${n}`),
+    tools_invoked: TOOL_NAMES.map(n => `gateway_kyc-tools___${n}`),
     memory_event_id: "0000001785773513609#6584e22d",
     prior_assessment_count: 5,
   },
@@ -244,7 +244,7 @@ const ASSESSMENTS: Record<string, Record<string, unknown>> = {
         "gateway_kyc-tools___adverse_media_scan",
       ],
     },
-    tools_invoked: TOOL_NAMES.map((n) => `gateway_kyc-tools___${n}`),
+    tools_invoked: TOOL_NAMES.map(n => `gateway_kyc-tools___${n}`),
     memory_event_id: "0000001785773698441#7c91a3f2",
     prior_assessment_count: 5,
   },
@@ -355,7 +355,7 @@ const ASSESSMENTS: Record<string, Record<string, unknown>> = {
         "gateway_kyc-tools___adverse_media_scan",
       ],
     },
-    tools_invoked: TOOL_NAMES.map((n) => `gateway_kyc-tools___${n}`),
+    tools_invoked: TOOL_NAMES.map(n => `gateway_kyc-tools___${n}`),
     memory_event_id: "0000001785773882997#30669194",
     prior_assessment_count: 5,
   },
@@ -386,7 +386,7 @@ const TOOL_DESCRIPTIONS: Record<string, string> = {
     "Scan negative news and adverse media sources for the entity and its principals. Returns findings with severity and the date of the most recent check.",
 }
 
-const GATEWAY_TOOLS = TOOL_NAMES.map((name) => ({
+const GATEWAY_TOOLS = TOOL_NAMES.map(name => ({
   name,
   description: TOOL_DESCRIPTIONS[name],
   inputSchema: {
@@ -410,8 +410,7 @@ const REGISTRY_RECORDS = [
       "Agent skill: corporate credit risk analysis producing a 0-100 score from financials, bureau data, and payment history.",
     descriptorType: "AGENT_SKILLS",
     status: "APPROVED",
-    statusReason:
-      "Approved by the FSI platform governance team for the KYC POC.",
+    statusReason: "Approved by the FSI platform governance team for the KYC POC.",
     descriptors: {
       agentSkills: {
         skillMd: {
@@ -481,7 +480,7 @@ function memoryFor(customerId: string) {
   }
   const verdict = verdicts[customerId] ?? "APPROVE; overall risk score 20/100"
 
-  const events = [0, 1].map((index) => ({
+  const events = [0, 1].map(index => ({
     eventId: `preview-event-${customerId}-${index}`,
     sessionId: `preview-session-${customerId}-${index}`,
     eventTimestamp: new Date(Date.now() - index * 86_400_000).toISOString(),
@@ -567,7 +566,7 @@ function assessStream(customerId: string): Response {
         const payload = JSON.stringify(JSON.stringify(frame))
         controller.enqueue(encoder.encode(`data: ${payload}\n\n`))
         // Brief pause so the progress trace is visible rather than instant.
-        await new Promise((resolve) => setTimeout(resolve, 320))
+        await new Promise(resolve => setTimeout(resolve, 320))
       }
       controller.close()
     },
@@ -638,7 +637,7 @@ export function installMockApi(): void {
     }
 
     if (path === "/api/registry/search") {
-      const approved = REGISTRY_RECORDS.filter((r) => r.status === "APPROVED")
+      const approved = REGISTRY_RECORDS.filter(r => r.status === "APPROVED")
       return json({ query: "preview", count: approved.length, records: approved })
     }
 

@@ -7,10 +7,9 @@ import json
 import logging
 from typing import Any
 
+import aws
 from botocore.exceptions import ClientError
 from fastapi import APIRouter
-
-import aws
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +65,9 @@ def get_memory(customer_id: str) -> dict[str, Any]:
     return {
         "customer_id": customer_id,
         "memory_id": memory_id,
-        "session_count": len({e.get("sessionId") for e in events if e.get("sessionId")}),
+        "session_count": len(
+            {e.get("sessionId") for e in events if e.get("sessionId")}
+        ),
         "event_count": len(events),
         "events": json.loads(json.dumps(events, default=str)),
         "records": json.loads(json.dumps(records, default=str)),

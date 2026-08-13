@@ -30,11 +30,7 @@ let inFlight: Promise<AwsCredentials> | null = null
 
 export class CredentialsError extends Error {}
 
-async function call<T>(
-  region: string,
-  action: string,
-  body: unknown
-): Promise<T> {
+async function call<T>(region: string, action: string, body: unknown): Promise<T> {
   const response = await fetch(`https://cognito-identity.${region}.amazonaws.com/`, {
     method: "POST",
     headers: {
@@ -46,7 +42,9 @@ async function call<T>(
 
   const parsed = await response.json().catch(() => ({}))
   if (!response.ok) {
-    const code = String(parsed?.__type ?? "").split("#").pop()
+    const code = String(parsed?.__type ?? "")
+      .split("#")
+      .pop()
     throw new CredentialsError(
       `${action} failed (${code ?? response.status}): ${parsed?.message ?? "unknown error"}`
     )
@@ -84,14 +82,10 @@ export async function getCredentials(
   const login = `cognito-idp.${config.region}.amazonaws.com/${config.userPoolId}`
 
   inFlight = (async () => {
-    const { IdentityId } = await call<{ IdentityId: string }>(
-      config.region,
-      "GetId",
-      {
-        IdentityPoolId: config.identityPoolId,
-        Logins: { [login]: idToken },
-      }
-    )
+    const { IdentityId } = await call<{ IdentityId: string }>(config.region, "GetId", {
+      IdentityPoolId: config.identityPoolId,
+      Logins: { [login]: idToken },
+    })
 
     const result = await call<{
       Credentials: {

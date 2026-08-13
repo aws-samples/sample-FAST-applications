@@ -42,7 +42,9 @@ def provider_exists(cp, name: str) -> bool:
         return False
 
 
-def config_input(discovery_url: str, client_id: str, secret_arn: str, json_key: str) -> dict:
+def config_input(
+    discovery_url: str, client_id: str, secret_arn: str, json_key: str
+) -> dict:
     return {
         "customOauth2ProviderConfig": {
             "oauthDiscovery": {"discoveryUrl": discovery_url},
@@ -78,7 +80,9 @@ def main() -> int:
 
         for required in ("user_pool_id", "client_id", "secret_arn", "discovery_url"):
             if not getattr(args, required):
-                parser.error(f"--{required.replace('_', '-')} is required to create/update")
+                parser.error(
+                    f"--{required.replace('_', '-')} is required to create/update"
+                )
 
         # 1. Read the Cognito-generated client secret.
         idp = boto3.client("cognito-idp", region_name=args.region)
@@ -96,7 +100,9 @@ def main() -> int:
         log(f"wrote client secret into {args.secret_arn} (key '{args.json_key}')")
 
         # 3. Create or update the EXTERNAL-secret provider.
-        cfg = config_input(args.discovery_url, args.client_id, args.secret_arn, args.json_key)
+        cfg = config_input(
+            args.discovery_url, args.client_id, args.secret_arn, args.json_key
+        )
         if provider_exists(cp, args.name):
             cp.update_oauth2_credential_provider(
                 name=args.name,

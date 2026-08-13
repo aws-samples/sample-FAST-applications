@@ -119,7 +119,7 @@ def http_post(url: str, payload: dict, token: str | None) -> tuple[int, str]:
         url, data=json.dumps(payload).encode(), headers=headers, method="POST"
     )
     try:
-        with urllib.request.urlopen(request, timeout=120) as resp:  # noqa: S310
+        with urllib.request.urlopen(request, timeout=120) as resp:
             return resp.status, resp.read().decode()
     except urllib.error.HTTPError as exc:
         return exc.code, exc.read().decode()
@@ -144,9 +144,9 @@ def main() -> int:
     log(f"required OAuth scope = {scope}")
 
     log("minting M2M OAuth token via AgentCore Identity…")
-    workload_token = dp.get_workload_access_token(
-        workloadName=wiring["workload_name"]
-    )["workloadAccessToken"]
+    workload_token = dp.get_workload_access_token(workloadName=wiring["workload_name"])[
+        "workloadAccessToken"
+    ]
     access_token = dp.get_resource_oauth2_token(
         workloadIdentityToken=workload_token,
         resourceCredentialProviderName=wiring["provider_name"],

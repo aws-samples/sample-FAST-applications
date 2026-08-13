@@ -37,8 +37,8 @@ sys.path.insert(
     0, str(pathlib.Path(__file__).resolve().parent.parent / "backend" / "agent")
 )
 
-from agents.compliance_officer import SKILL as COMPLIANCE_SKILL  # noqa: E402
-from agents.credit_analyst import SKILL as CREDIT_SKILL  # noqa: E402
+from agents.compliance_officer import SKILL as COMPLIANCE_SKILL
+from agents.credit_analyst import SKILL as CREDIT_SKILL
 
 # Records reach a terminal state asynchronously; CreateRegistryRecord returns 202.
 TERMINAL_STATUSES = {
@@ -167,7 +167,9 @@ def build_a2a_record(runtime_arn: str, region: str) -> dict:
             "AgentCore Runtime."
         ),
         "descriptorType": "A2A",
-        "descriptors": {"a2a": {"agentCard": {"inlineContent": json.dumps(agent_card)}}},
+        "descriptors": {
+            "a2a": {"agentCard": {"inlineContent": json.dumps(agent_card)}}
+        },
     }
 
 
@@ -241,9 +243,9 @@ def wait_for_terminal(client, registry_id: str, record_id: str) -> str:
     deadline = time.time() + POLL_TIMEOUT_SECONDS
     status = "UNKNOWN"
     while time.time() < deadline:
-        status = client.get_registry_record(
-            registryId=registry_id, recordId=record_id
-        )["status"]
+        status = client.get_registry_record(registryId=registry_id, recordId=record_id)[
+            "status"
+        ]
         if status in TERMINAL_STATUSES:
             return status
         # nosemgrep: arbitrary-sleep — poll interval inside a bounded record-status wait

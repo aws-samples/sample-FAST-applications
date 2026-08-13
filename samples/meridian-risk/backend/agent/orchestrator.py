@@ -20,8 +20,6 @@ import re
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
-from strands import Agent
-
 from agents.compliance_officer import SKILL as COMPLIANCE_SKILL
 from agents.credit_analyst import SKILL as CREDIT_SKILL
 from agents.skill import Skill
@@ -33,6 +31,7 @@ from lib.memory import (
     recall_prior_assessments,
     record_assessment,
 )
+from strands import Agent
 
 logger = logging.getLogger(__name__)
 
@@ -414,13 +413,17 @@ class KYCOrchestrator:
         if "credit" in findings:
             report += (
                 "=== CREDIT ANALYST FINDINGS ===\n"
-                + json.dumps(self._decision_view(findings["credit"]), indent=2, default=str)
+                + json.dumps(
+                    self._decision_view(findings["credit"]), indent=2, default=str
+                )
                 + "\n\n"
             )
         if "compliance" in findings:
             report += (
                 "=== COMPLIANCE OFFICER FINDINGS ===\n"
-                + json.dumps(self._decision_view(findings["compliance"]), indent=2, default=str)
+                + json.dumps(
+                    self._decision_view(findings["compliance"]), indent=2, default=str
+                )
                 + "\n\n"
             )
         report += prior_context

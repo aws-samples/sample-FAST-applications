@@ -25,5 +25,7 @@ class ToolInvokeRequest(BaseModel):
 
 
 class StatusRequest(BaseModel):
-    status: str = Field(..., pattern="^(PENDING_APPROVAL|APPROVED|REJECTED|DEPRECATED)$")
+    status: str = Field(
+        ..., pattern="^(PENDING_APPROVAL|APPROVED|REJECTED|DEPRECATED)$"
+    )
     reason: str = Field(default="Updated from the demo console")

@@ -17,9 +17,7 @@ export type Theme = "dark" | "light"
 const STORAGE_KEY = "meridian.theme"
 
 function systemTheme(): Theme {
-  return window.matchMedia?.("(prefers-color-scheme: light)").matches
-    ? "light"
-    : "dark"
+  return window.matchMedia?.("(prefers-color-scheme: light)").matches ? "light" : "dark"
 }
 
 export function storedTheme(): Theme | null {

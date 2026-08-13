@@ -32,7 +32,9 @@
   border: var(--rule);
   border-radius: 9px;
   background: var(--ink-900);
-  transition: border-color 0.16s, background 0.2s;
+  transition:
+    border-color 0.16s,
+    background 0.2s;
   flex-shrink: 0;
 }
 
@@ -49,7 +51,9 @@
   border-radius: 50%;
   background: var(--amber);
   /* Slides to the right edge in the light theme. */
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background 0.2s;
+  transition:
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.2s;
 }
 
 .theme-toggle[aria-pressed="true"] .theme-toggle-knob {

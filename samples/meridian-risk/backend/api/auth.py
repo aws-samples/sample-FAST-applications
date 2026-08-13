@@ -31,10 +31,11 @@ CLIENT_ID = os.environ.get("USER_POOL_CLIENT_ID", "")
 # Local development sets this to skip auth. It is ignored inside Lambda
 # (AWS_LAMBDA_FUNCTION_NAME is always set there) so the bypass is structurally
 # impossible in the deployed console, regardless of how the env var is set.
-AUTH_DISABLED = (
-    os.environ.get("AUTH_DISABLED", "").lower() in ("1", "true", "yes")
-    and not os.environ.get("AWS_LAMBDA_FUNCTION_NAME")
-)
+AUTH_DISABLED = os.environ.get("AUTH_DISABLED", "").lower() in (
+    "1",
+    "true",
+    "yes",
+) and not os.environ.get("AWS_LAMBDA_FUNCTION_NAME")
 
 _JWKS_TTL_SECONDS = 3600
 # Minimum gap between forced refetches on an unknown `kid`. Without this, junk
@@ -63,7 +64,7 @@ def _jwks() -> dict[str, Any]:
 
     url = f"{_issuer()}/.well-known/jwks.json"
     # nosec B310 — the URL is built from our own pool ID, not user input.
-    with urlopen(url, timeout=5) as response:  # noqa: S310
+    with urlopen(url, timeout=5) as response:
         import json
 
         _jwks_cache = json.load(response)

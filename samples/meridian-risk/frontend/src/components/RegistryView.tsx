@@ -15,10 +15,8 @@ const TYPE_BLURB: Record<string, string> = {
 
 /** Next status in the governance workflow, or null if terminal. */
 function nextStatus(status: string): { status: string; label: string } | null {
-  if (status === "DRAFT")
-    return { status: "PENDING_APPROVAL", label: "Submit for approval" }
-  if (status === "PENDING_APPROVAL")
-    return { status: "APPROVED", label: "Approve" }
+  if (status === "DRAFT") return { status: "PENDING_APPROVAL", label: "Submit for approval" }
+  if (status === "PENDING_APPROVAL") return { status: "APPROVED", label: "Approve" }
   return null
 }
 
@@ -116,7 +114,7 @@ export function RegistryView() {
   }
 
   const shown = searchResults ?? records
-  const approvedCount = records.filter((r) => r.status === "APPROVED").length
+  const approvedCount = records.filter(r => r.status === "APPROVED").length
 
   return (
     <>
@@ -124,10 +122,9 @@ export function RegistryView() {
         <div className="eyebrow">AgentCore Registry — preview</div>
         <h2>Governed AI resource catalog</h2>
         <p>
-          Every agent, skill, and MCP server this platform exposes is catalogued
-          here, so teams discover what already exists instead of rebuilding it.
-          Records pass through an approval workflow before they become
-          discoverable, and CloudTrail audits every access.
+          Every agent, skill, and MCP server this platform exposes is catalogued here, so teams
+          discover what already exists instead of rebuilding it. Records pass through an approval
+          workflow before they become discoverable, and CloudTrail audits every access.
         </p>
       </div>
 
@@ -135,8 +132,7 @@ export function RegistryView() {
         <div className="panel-head">
           <span className="panel-title">Semantic discovery</span>
           <span className="muted mono">
-            {records.length} records · {approvedCount} approved ·{" "}
-            {registryId || "—"}
+            {records.length} records · {approvedCount} approved · {registryId || "—"}
           </span>
         </div>
         <div className="panel-body">
@@ -145,8 +141,8 @@ export function RegistryView() {
               type="text"
               value={query}
               placeholder="Ask in plain language — e.g. which agent can screen for sanctions exposure?"
-              onChange={(event) => setQuery(event.target.value)}
-              onKeyDown={(event) => event.key === "Enter" && void search()}
+              onChange={event => setQuery(event.target.value)}
+              onKeyDown={event => event.key === "Enter" && void search()}
             />
             <button
               className="btn"
@@ -171,17 +167,22 @@ export function RegistryView() {
           </div>
           {searchResults && (
             <div className="muted" style={{ marginTop: 10 }}>
-              {searchResults.length} approved record(s) matched — ranked by
-              semantic relevance.
+              {searchResults.length} approved record(s) matched — ranked by semantic relevance.
             </div>
           )}
         </div>
       </div>
 
-      {error && <div className="error" style={{ marginBottom: 14 }}>{error}</div>}
-      {notice && <div className="panel" style={{ marginBottom: 14 }}>
-        <div className="panel-body muted">{notice}</div>
-      </div>}
+      {error && (
+        <div className="error" style={{ marginBottom: 14 }}>
+          {error}
+        </div>
+      )}
+      {notice && (
+        <div className="panel" style={{ marginBottom: 14 }}>
+          <div className="panel-body muted">{notice}</div>
+        </div>
+      )}
 
       {shown.length === 0 && !error ? (
         <div className="panel">
@@ -191,7 +192,7 @@ export function RegistryView() {
           </div>
         </div>
       ) : (
-        shown.map((record) => {
+        shown.map(record => {
           const next = nextStatus(record.status)
           const tools = toolsOf(record)
           const content = descriptorContent(record)
@@ -229,13 +230,11 @@ export function RegistryView() {
                 </div>
               </div>
 
-              {record.description && (
-                <p className="record-desc">{record.description}</p>
-              )}
+              {record.description && <p className="record-desc">{record.description}</p>}
 
               {tools.length > 0 && (
                 <div className="chip-row" style={{ marginTop: 9 }}>
-                  {tools.map((tool) => (
+                  {tools.map(tool => (
                     <span key={tool} className="chip chip-tool">
                       {tool}
                     </span>

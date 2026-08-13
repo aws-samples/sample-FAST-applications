@@ -77,9 +77,7 @@ def record_assessment(
         # joining — otherwise "; ".join raises TypeError, which the caller's
         # except swallows and the whole assessment fails to persist to Memory.
         outcome += (
-            " Key risks identified: "
-            + "; ".join(str(risk) for risk in risks[:5])
-            + "."
+            " Key risks identified: " + "; ".join(str(risk) for risk in risks[:5]) + "."
         )
     if assessment.get("summary"):
         outcome += f" Rationale: {assessment['summary']}"
@@ -154,7 +152,7 @@ def recall_prior_assessments(customer_id: str, top_k: int = 5) -> list[dict[str,
             text = content.get("text") if isinstance(content, dict) else None
             if text:
                 records.append({"content": {"text": text}, "_source": "extracted"})
-    except Exception:
+    except Exception:  # noqa: BLE001 — memory recall is best-effort; degrade, don't fail
         logger.warning("[MEMORY] extracted-record recall failed for %s", customer_id)
 
     try:
@@ -165,11 +163,13 @@ def recall_prior_assessments(customer_id: str, top_k: int = 5) -> list[dict[str,
                 # Match the recorded outcome on either turn: record_assessment
                 # puts it on the USER turn, but events written by an earlier
                 # build of the agent carry it on the ASSISTANT turn.
-                if "risk score" in text.lower() and "decision" in text.lower():
+                if (
+                    "risk score" in text.lower()
+                    and "decision" in text.lower()
+                    or text.lower().startswith("kyc assessment for")
+                ):
                     records.append({"content": {"text": text}, "_source": "event"})
-                elif text.lower().startswith("kyc assessment for"):
-                    records.append({"content": {"text": text}, "_source": "event"})
-    except Exception:
+    except Exception:  # noqa: BLE001 — memory recall is best-effort; degrade, don't fail
         logger.warning("[MEMORY] event recall failed for %s", customer_id)
 
     # Deduplicate: an extracted fact often restates its source event.
@@ -241,13 +241,14 @@ def count_assessment_sessions(customer_id: str) -> int | None:
         ):
             total += len(page.get("sessionSummaries", []))
         return total
-    except Exception:
-        # Never fail an assessment over a display statistic.
+    except Exception:  # noqa: BLE001 — never fail an assessment over a display statistic
         logger.warning("[MEMORY] session count failed for %s", customer_id)
         return None
 
 
-def list_assessment_events(customer_id: str, max_results: int = 20) -> list[dict[str, Any]]:
+def list_assessment_events(
+    customer_id: str, max_results: int = 20
+) -> list[dict[str, Any]]:
     """List raw Memory events for a customer, newest first.
 
     Powers the Memory timeline in the demo console.
@@ -274,9 +275,7 @@ def list_assessment_events(customer_id: str, max_results: int = 20) -> list[dict
         # TypeError, which the except below would swallow, silently returning no
         # history. Sort on the ISO string with a string default so the types
         # never mix. (The API's copy already does this; keep them consistent.)
-        events.sort(
-            key=lambda e: str(e.get("eventTimestamp", "")), reverse=True
-        )
+        events.sort(key=lambda e: str(e.get("eventTimestamp", "")), reverse=True)
         return events[:max_results]
     except Exception:
         logger.exception("[MEMORY] failed to list events for %s", customer_id)

@@ -5,9 +5,8 @@
 
 from typing import Any
 
-from fastapi import APIRouter
-
 import aws
+from fastapi import APIRouter
 
 router = APIRouter()
 
@@ -21,8 +20,7 @@ def get_config() -> dict[str, Any]:
     inference_url = ""
     if aws.GATEWAY_URL:
         base = aws.GATEWAY_URL.rstrip("/")
-        if base.endswith("/mcp"):
-            base = base[: -len("/mcp")]
+        base = base.removesuffix("/mcp")
         inference_url = f"{base}/inference/v1"
 
     return {
@@ -40,7 +38,9 @@ def get_config() -> dict[str, Any]:
         "policy_engine_id": aws.POLICY_ENGINE_ID,
         "policy_mode": aws.POLICY_MODE,
         "harness_id": aws.HARNESS_ID,
-        "configured": all([aws.RUNTIME_ARN, aws.REGISTRY_ID, aws.GATEWAY_ID, aws.MEMORY_ID]),
+        "configured": all(
+            [aws.RUNTIME_ARN, aws.REGISTRY_ID, aws.GATEWAY_ID, aws.MEMORY_ID]
+        ),
         "demo_customers": [
             {
                 "id": "CUST001",

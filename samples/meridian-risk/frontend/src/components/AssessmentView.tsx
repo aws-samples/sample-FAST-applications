@@ -70,7 +70,9 @@ function SpecialistPanel({
         {isCredit ? (
           <span className="spec-score mono">{finding.score}</span>
         ) : (
-          <span className={`chip status-${finding.status === "compliant" ? "APPROVED" : "REJECTED"}`}>
+          <span
+            className={`chip status-${finding.status === "compliant" ? "APPROVED" : "REJECTED"}`}
+          >
             {finding.status?.replace(/_/g, " ")}
           </span>
         )}
@@ -91,9 +93,7 @@ function SpecialistPanel({
         ) : (
           <>
             {finding.edd_required && (
-              <span className="chip status-PENDING_APPROVAL">
-                Enhanced due diligence required
-              </span>
+              <span className="chip status-PENDING_APPROVAL">Enhanced due diligence required</span>
             )}
             <Labelled label="Checks failed">
               <FindingList items={finding.checks_failed} risk />
@@ -122,17 +122,11 @@ function SpecialistPanel({
                 : "Tool scope"
             }
           >
-            {finding._skill && (
-              <div className="scope-skill mono">
-                skill: {finding._skill}
-              </div>
-            )}
+            {finding._skill && <div className="scope-skill mono">skill: {finding._skill}</div>}
             <div className="chip-row">
-              {finding._tools_granted.map((tool) => {
+              {finding._tools_granted.map(tool => {
                 const bare = bareToolName(tool)
-                const called = (finding._tool_calls ?? []).some(
-                  (c) => bareToolName(c) === bare
-                )
+                const called = (finding._tool_calls ?? []).some(c => bareToolName(c) === bare)
                 return (
                   <span
                     key={tool}
@@ -148,7 +142,7 @@ function SpecialistPanel({
                   </span>
                 )
               })}
-              {(finding._withheld ?? []).map((tool) => (
+              {(finding._withheld ?? []).map(tool => (
                 <span
                   key={tool}
                   className="chip chip-withheld"
@@ -165,19 +159,9 @@ function SpecialistPanel({
   )
 }
 
-function Labelled({
-  label,
-  children,
-}: {
-  label: string
-  children: React.ReactNode
-}) {
+function Labelled({ label, children }: { label: string; children: React.ReactNode }) {
   // Render nothing when the child list is empty, so panels stay tight.
-  if (
-    children == null ||
-    (Array.isArray(children) && children.length === 0) ||
-    children === false
-  )
+  if (children == null || (Array.isArray(children) && children.length === 0) || children === false)
     return null
   return (
     <div>
@@ -212,10 +196,7 @@ export function AssessmentView({ customers }: Props) {
       } else if (event.type === "error") {
         setError(event.message ?? "Assessment failed")
       } else if (event.message) {
-        setLog((prior) => [
-          ...prior,
-          { stage: event.stage ?? event.type, message: event.message! },
-        ])
+        setLog(prior => [...prior, { stage: event.stage ?? event.type, message: event.message! }])
       }
     }
 
@@ -239,7 +220,7 @@ export function AssessmentView({ customers }: Props) {
     }
   }
 
-  const selected = customers.find((c) => c.id === customerId)
+  const selected = customers.find(c => c.id === customerId)
 
   return (
     <>
@@ -247,10 +228,9 @@ export function AssessmentView({ customers }: Props) {
         <div className="eyebrow">AgentCore Runtime</div>
         <h2>Corporate onboarding assessment</h2>
         <p>
-          Two specialist agents — a Credit Analyst and a Compliance Officer — run
-          concurrently against the Gateway's KYC tools, then a supervisor
-          synthesizes a single onboarding decision. Prior assessments are
-          recalled from Memory before the review begins.
+          Two specialist agents — a Credit Analyst and a Compliance Officer — run concurrently
+          against the Gateway's KYC tools, then a supervisor synthesizes a single onboarding
+          decision. Prior assessments are recalled from Memory before the review begins.
         </p>
       </div>
 
@@ -260,7 +240,7 @@ export function AssessmentView({ customers }: Props) {
             <span className="panel-title">Prospective customer</span>
           </div>
           <div className="panel-body">
-            {customers.map((customer) => (
+            {customers.map(customer => (
               <button
                 key={customer.id}
                 className="customer"
@@ -279,7 +259,7 @@ export function AssessmentView({ customers }: Props) {
                 <span className="field-label">Scope</span>
                 <select
                   value={assessmentType}
-                  onChange={(event) => setAssessmentType(event.target.value)}
+                  onChange={event => setAssessmentType(event.target.value)}
                   disabled={running}
                 >
                   <option value="full">Full — credit and compliance</option>
@@ -292,7 +272,7 @@ export function AssessmentView({ customers }: Props) {
                 <span className="field-label">Analyst notes (optional)</span>
                 <textarea
                   value={analystContext}
-                  onChange={(event) => setAnalystContext(event.target.value)}
+                  onChange={event => setAnalystContext(event.target.value)}
                   placeholder="e.g. Applicant requests a $10M revolving facility."
                   disabled={running}
                 />
@@ -350,9 +330,7 @@ export function AssessmentView({ customers }: Props) {
             <>
               <div className="verdict" data-v={result.recommendation}>
                 <div className="score-dial">
-                  <div className="score-value">
-                    {result.overall_risk_score ?? "—"}
-                  </div>
+                  <div className="score-value">{result.overall_risk_score ?? "—"}</div>
                   <div className="score-scale">risk / 100</div>
                 </div>
                 <div>
@@ -392,10 +370,7 @@ export function AssessmentView({ customers }: Props) {
                               >
                                 gateway
                               </span>{" "}
-                              →{" "}
-                              <span className="mono">
-                                {result.inference.model_id ?? "?"}
-                              </span>
+                              → <span className="mono">{result.inference.model_id ?? "?"}</span>
                             </>
                           ) : (
                             <>
@@ -405,10 +380,7 @@ export function AssessmentView({ customers }: Props) {
                               >
                                 direct
                               </span>{" "}
-                              →{" "}
-                              <span className="mono">
-                                {result.inference.model_id ?? "?"}
-                              </span>
+                              → <span className="mono">{result.inference.model_id ?? "?"}</span>
                             </>
                           )}
                         </dd>
@@ -464,8 +436,7 @@ export function AssessmentView({ customers }: Props) {
                           {result.policy.authorized_calls !== undefined && (
                             <>
                               {result.policy.authorized_calls} tool call
-                              {result.policy.authorized_calls === 1 ? "" : "s"}{" "}
-                              authorized
+                              {result.policy.authorized_calls === 1 ? "" : "s"} authorized
                             </>
                           )}
                           {result.policy.engine_id && (
@@ -491,11 +462,10 @@ export function AssessmentView({ customers }: Props) {
                     <dt>Prior assessments</dt>
                     <dd>
                       {result.prior_assessment_total != null &&
-                      result.prior_assessment_total >
-                        (result.prior_assessment_count ?? 0) ? (
+                      result.prior_assessment_total > (result.prior_assessment_count ?? 0) ? (
                         <>
-                          {result.prior_assessment_count ?? 0} of{" "}
-                          {result.prior_assessment_total} recalled from Memory{" "}
+                          {result.prior_assessment_count ?? 0} of {result.prior_assessment_total}{" "}
+                          recalled from Memory{" "}
                           <span
                             className="muted"
                             title="Recall is capped so the prompt stays focused; the full history remains in Memory and is visible on the Memory tab."
@@ -504,10 +474,7 @@ export function AssessmentView({ customers }: Props) {
                           </span>
                         </>
                       ) : (
-                        <>
-                          {result.prior_assessment_count ?? 0} recalled from
-                          Memory
-                        </>
+                        <>{result.prior_assessment_count ?? 0} recalled from Memory</>
                       )}
                     </dd>
                   </dl>

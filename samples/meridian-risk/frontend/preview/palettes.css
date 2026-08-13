@@ -170,7 +170,10 @@
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 0.05em;
-  transition: background 0.14s, border-color 0.14s, color 0.14s;
+  transition:
+    background 0.14s,
+    border-color 0.14s,
+    color 0.14s;
 }
 
 .pv-btn:hover {

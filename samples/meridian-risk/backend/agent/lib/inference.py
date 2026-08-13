@@ -41,6 +41,7 @@ provider SDKs get a custom httpx client whose auth hook signs each request.
 The SDKs still insist on an api_key being set, so a placeholder is passed and
 the hook overwrites the Authorization header.
 """
+
 from __future__ import annotations
 
 import logging
@@ -104,9 +105,9 @@ def _sign(request, session: boto3.Session, region: str) -> None:
         data=request.content,
         headers=headers,
     )
-    SigV4Auth(
-        creds.get_frozen_credentials(), "bedrock-agentcore", region
-    ).add_auth(aws_request)
+    SigV4Auth(creds.get_frozen_credentials(), "bedrock-agentcore", region).add_auth(
+        aws_request
+    )
 
     for key, value in aws_request.headers.items():
         request.headers[key] = value
@@ -149,8 +150,7 @@ def inference_base_url(gateway_url: str, include_v1: bool) -> str:
         include_v1: True for the OpenAI SDK, False for the Anthropic SDK.
     """
     base = gateway_url.rstrip("/")
-    if base.endswith("/mcp"):
-        base = base[: -len("/mcp")]
+    base = base.removesuffix("/mcp")
     return f"{base}/inference/v1" if include_v1 else f"{base}/inference"
 
 
@@ -161,7 +161,7 @@ def _is_anthropic(model_id: str) -> bool:
     hypothetical third-party model with "claude" in its name is not misrouted.
     """
     tail = model_id.split("/")[-1]
-    return tail.startswith("anthropic.") or tail.startswith("claude-")
+    return tail.startswith(("anthropic.", "claude-"))
 
 
 def _build_gateway_model(model_id: str, region: str) -> object:
@@ -176,7 +176,7 @@ def _build_gateway_model(model_id: str, region: str) -> object:
             "GATEWAY_URL environment variable is required for gateway inference"
         )
     if _is_anthropic(model_id):
-        from strands.models.anthropic import AnthropicModel  # noqa: PLC0415
+        from strands.models.anthropic import AnthropicModel
 
         base_url = inference_base_url(gateway_url, include_v1=False)
         logger.info(
@@ -211,8 +211,8 @@ def _build_gateway_model(model_id: str, region: str) -> object:
             params={},
         )
 
-    import openai  # noqa: PLC0415
-    from strands.models.openai import OpenAIModel  # noqa: PLC0415
+    import openai
+    from strands.models.openai import OpenAIModel
 
     class _NoEmptyToolsModel(OpenAIModel):
         """OpenAIModel that omits `tools` from the request when it is empty.

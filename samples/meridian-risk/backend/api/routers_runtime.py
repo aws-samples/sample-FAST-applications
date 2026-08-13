@@ -11,11 +11,10 @@ import json
 import logging
 from typing import Any
 
+import aws
 from botocore.exceptions import ClientError
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
-
-import aws
 from models import AssessRequest
 
 logger = logging.getLogger(__name__)

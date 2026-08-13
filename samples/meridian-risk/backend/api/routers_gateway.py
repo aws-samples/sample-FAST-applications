@@ -7,10 +7,9 @@ import base64
 import json
 from typing import Any
 
+import aws
 from botocore.exceptions import ClientError
 from fastapi import APIRouter, HTTPException
-
-import aws
 from models import ToolInvokeRequest
 
 router = APIRouter(prefix="/gateway")
@@ -83,7 +82,6 @@ def invoke_gateway_tool(request: ToolInvokeRequest) -> dict[str, Any]:
     """
     function_name = aws.require(aws.KYC_TOOLS_LAMBDA, "aws.KYC_TOOLS_LAMBDA")
 
-
     client_context = base64.b64encode(
         json.dumps(
             {"custom": {"bedrockAgentCoreToolName": f"kyc-tools___{request.tool_name}"}}
@@ -108,4 +106,8 @@ def invoke_gateway_tool(request: ToolInvokeRequest) -> dict[str, Any]:
     except json.JSONDecodeError:
         parsed = {"raw": text}
 
-    return {"tool": request.tool_name, "customer_id": request.customer_id, "result": parsed}
+    return {
+        "tool": request.tool_name,
+        "customer_id": request.customer_id,
+        "result": parsed,
+    }

@@ -6,13 +6,7 @@ import { api, configureApi, UnauthorizedError, type Config } from "./lib/api"
 import { authRequired, loadConfig, type RuntimeConfig } from "./lib/config"
 import { restoreSession, signOut, type Session } from "./lib/auth"
 import { clearCredentials } from "./lib/credentials"
-import {
-  applyTheme,
-  initialTheme,
-  persistTheme,
-  watchSystemTheme,
-  type Theme,
-} from "./lib/theme"
+import { applyTheme, initialTheme, persistTheme, watchSystemTheme, type Theme } from "./lib/theme"
 import { ThemeToggle } from "./components/ThemeToggle"
 import { LoginView } from "./components/LoginView"
 import { AssessmentView } from "./components/AssessmentView"
@@ -51,12 +45,12 @@ export default function App() {
   // Load runtime config, point the API client at it, then restore any session.
   useEffect(() => {
     loadConfig()
-      .then((loaded) => {
+      .then(loaded => {
         setRuntime(loaded)
         configureApi(loaded)
         setSession(restoreSession())
       })
-      .catch((exc) => setError((exc as Error).message))
+      .catch(exc => setError((exc as Error).message))
       .finally(() => setBooted(true))
   }, [])
 
@@ -68,7 +62,7 @@ export default function App() {
     api
       .config()
       .then(setConfig)
-      .catch((exc) => {
+      .catch(exc => {
         if (exc instanceof UnauthorizedError) {
           // Token expired or was revoked — fall back to the login screen.
           signOut()
@@ -172,16 +166,15 @@ export default function App() {
             Cannot reach the console API: {error}
             <br />
             <span className="muted">
-              Locally, start it with ./scripts/dev.sh. If the stack was just
-              deployed, run scripts/write_env.py and restart the API.
+              Locally, start it with ./scripts/dev.sh. If the stack was just deployed, run
+              scripts/write_env.py and restart the API.
             </span>
           </div>
         )}
 
         {config && !config.configured && (
           <div className="error" style={{ marginBottom: 16 }}>
-            Some services are not configured. Run{" "}
-            <code>python3 scripts/write_env.py</code> after{" "}
+            Some services are not configured. Run <code>python3 scripts/write_env.py</code> after{" "}
             <code>terraform apply</code>, then restart the API.
           </div>
         )}

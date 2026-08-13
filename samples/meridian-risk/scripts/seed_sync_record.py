@@ -91,9 +91,9 @@ def wait_for_terminal(client, registry_id: str, record_id: str) -> str:
     deadline = time.time() + POLL_TIMEOUT_SECONDS
     status = "UNKNOWN"
     while time.time() < deadline:
-        status = client.get_registry_record(
-            registryId=registry_id, recordId=record_id
-        )["status"]
+        status = client.get_registry_record(registryId=registry_id, recordId=record_id)[
+            "status"
+        ]
         if status in TERMINAL_STATUSES:
             return status
         # nosemgrep: arbitrary-sleep — bounded status wait
