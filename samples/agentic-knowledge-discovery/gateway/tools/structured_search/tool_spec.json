@@ -1,0 +1,28 @@
+[
+  {
+    "name": "describe_schema",
+    "description": "List the tables and columns in the structured metadata database so you can plan a query. The main table is documents(doc_id, domain, doc_type, num_pages, title). Call this before run_sql_query when you are unsure of the schema or the available values.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "run_sql_query",
+    "description": "Run a single read-only SELECT over the structured document metadata and return rows as text (PostgreSQL syntax, SELECT only, max 100 rows). Use this to filter and aggregate documents by their attributes (e.g. by domain, doc_type, or num_pages ranges), to discover which documents or domains exist, and to get the doc_id values to then narrow an unstructured doc_search with a metadata filter. Example: SELECT doc_id, domain, num_pages FROM documents WHERE domain = 'legal' ORDER BY num_pages DESC.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "A single SELECT statement (PostgreSQL)."
+        },
+        "limit": {
+          "type": "integer",
+          "description": "Maximum rows to return (optional, default and max 100)."
+        }
+      },
+      "required": ["query"]
+    }
+  }
+]

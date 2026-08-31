@@ -1,0 +1,34 @@
+[
+  {
+    "name": "doc_search",
+    "description": "Search the unstructured document knowledge base (hybrid semantic + keyword retrieval). Pass one or more search requests in a single call; results are de-duplicated by chunk across the batch and returned as chunks with a relevance score, the source doc_id, and (for paginated sources) a page number.\n\nEach request may include an optional metadata filter to scope the search to a subset of documents. Filterable metadata keys: domain (string), doc_type (string), num_pages (number), doc_id (string). Use structured_search first if you need to discover the available values. Supported operators include equals, notEquals, in, notIn, greaterThan, greaterThanOrEquals, lessThan, lessThanOrEquals, startsWith, stringContains, listContains, and andAll/orAll to combine them.\n\nExamples of filters: {\"equals\": {\"key\": \"domain\", \"value\": \"legal\"}}; {\"in\": {\"key\": \"domain\", \"value\": [\"legal\", \"education\"]}}; {\"andAll\": [{\"equals\": {\"key\": \"doc_type\", \"value\": \"report\"}}, {\"greaterThan\": {\"key\": \"num_pages\", \"value\": 20}}]}.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "search_requests": {
+          "type": "array",
+          "description": "One or more search requests to run in a single batch.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "type": "string",
+                "description": "Natural-language search query."
+              },
+              "filter": {
+                "type": "object",
+                "description": "Optional Bedrock metadata filter to scope this query (see operators above)."
+              }
+            },
+            "required": ["query"]
+          }
+        },
+        "numberOfResults": {
+          "type": "integer",
+          "description": "Maximum chunks per query (optional, default 10, max 25)."
+        }
+      },
+      "required": ["search_requests"]
+    }
+  }
+]
