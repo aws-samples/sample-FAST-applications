@@ -27,7 +27,7 @@
     "react-dom": "^19.2.1",
     "react-dropzone": "^14.3.8",
     "react-oidc-context": "^3.3.0",
-    "react-router-dom": "^6.21.0",
+    "react-router-dom": "^6.30.6",
     "react-spinners": "^0.17.0",
     "tailwind-merge": "^3.2.0"
   },
