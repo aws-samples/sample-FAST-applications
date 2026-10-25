@@ -37,7 +37,7 @@ dev = ["pytest>=7.0.0", "ruff>=0.1.0", "mypy>=1.0.0"]
 
 # Strands agent dependencies (for local development)
 agent-strands = [
-    "strands-agents==1.16.0",
+    "strands-agents==1.43.0",
     "bedrock-agentcore[strands-agents]==1.0.6",
     "mcp==1.30.0",
 ]
