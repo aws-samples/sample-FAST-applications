@@ -11,7 +11,7 @@
     "cdk": "cdk"
   },
   "overrides": {
-    "fast-xml-parser": ">=5.5.9"
+    "fast-xml-parser": ">=5.12.1"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
