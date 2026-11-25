@@ -8,12 +8,11 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@ag-ui/client": "^0.0.47",
-    "@ag-ui/mcp-apps-middleware": "^0.0.3",
-    "@copilotkit/runtime": "^1.56.0",
+    "@ag-ui/client": "1.0.5",
+    "@copilotkit/agentcore-runner": "1.89.0",
+    "@copilotkit/runtime": "1.89.0",
     "@hono/node-server": "^1.19.15",
-    "hono": "^4.13.18",
-    "rxjs": "^7.8.2"
+    "hono": "^4.13.18"
   },
   "devDependencies": {
     "@types/node": "^22.15.32",
