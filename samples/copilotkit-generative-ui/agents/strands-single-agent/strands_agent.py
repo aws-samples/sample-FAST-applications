@@ -43,8 +43,7 @@ When managing todos, use manage_todos to update the list.
 When asked about your tools, list them and explain what they do."""
 
 BEDROCK_MODEL = BedrockModel(
-    model_id="us.anthropic.claude-sonnet-4-5-20250929-v1:0",
-    temperature=0.1,
+    model_id="us.anthropic.claude-sonnet-5-5",
 )
 
 
