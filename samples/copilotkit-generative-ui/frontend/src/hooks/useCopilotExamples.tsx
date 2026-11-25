@@ -1,12 +1,5 @@
 import { z } from "zod"
-import {
-  useComponent,
-  useFrontendTool,
-  useHumanInTheLoop,
-  useDefaultRenderTool,
-} from "@copilotkit/react-core/v2"
-import { PieChart, PieChartPropsSchema } from "@/components/generative-ui/PieChart"
-import { BarChart, BarChartPropsSchema } from "@/components/generative-ui/BarChart"
+import { useFrontendTool, useHumanInTheLoop, useDefaultRenderTool } from "@copilotkit/react-core/v2"
 import { ToolReasoning } from "@/components/generative-ui/ToolReasoning"
 import { MeetingTimePicker } from "@/components/generative-ui/MeetingTimePicker"
 import { useTheme } from "@/hooks/useTheme"
@@ -27,21 +20,9 @@ export const useCopilotExamples = () => {
     [theme, setTheme]
   )
 
-  // Controlled Generative UI: pie chart
-  useComponent({
-    name: "pieChart",
-    description: "Controlled Generative UI that displays data as a pie chart.",
-    parameters: PieChartPropsSchema,
-    render: PieChart,
-  })
-
-  // Controlled Generative UI: bar chart
-  useComponent({
-    name: "barChart",
-    description: "Controlled Generative UI that displays data as a bar chart.",
-    parameters: BarChartPropsSchema,
-    render: BarChart,
-  })
+  // Generative UI (charts, tables, metric cards, forms, ...) needs no hook here:
+  // the component catalog in `@/lib/generative-ui` is registered once on
+  // CopilotKitProvider, and the agent renders from it with the `render_ui` tool.
 
   // Default renderer for all backend tool calls
   useDefaultRenderTool({
