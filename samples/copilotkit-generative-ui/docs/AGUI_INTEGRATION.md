@@ -28,7 +28,24 @@ When CopilotKit reconnects to an existing thread (e.g. on page refresh), it call
 
 2. **Unknown threads** — CopilotKit may call `connect()` before any `run()` has happened (e.g. on first page load). Without handling this, the base runner errors. The `AgentCoreRunner` returns an empty snapshot instead.
 
-The `AgentCoreRunner` class in `infra-cdk/lambdas/copilotkit-runtime/src/runtime.ts` extends `InMemoryAgentRunner` to handle both cases.
+`AgentCoreRunner` from the `@copilotkit/agentcore-runner` package extends `InMemoryAgentRunner` to handle both cases. It is passed to `CopilotRuntime` in `infra-cdk/lambdas/copilotkit-runtime/src/runtime.ts`.
+
+## Versions
+
+This sample targets AG-UI 1.0. The packages move together, so upgrade them as a set:
+
+| Layer | Packages |
+|---|---|
+| Frontend | `@copilotkit/react-core` 1.89+ (brings `@ag-ui/client` 1.0.x) |
+| Runtime Lambda | `@copilotkit/runtime` and `@copilotkit/agentcore-runner` 1.89.0, `@ag-ui/client` 1.0.5 (same version the runtime pins) |
+| Strands agent | `ag-ui-protocol` 1.0.0, `ag-ui-strands` 1.0.x, `strands-agents` 1.55+ |
+| LangGraph agent | `ag-ui-protocol` 1.0.0, `ag-ui-langgraph` 0.0.47+, `copilotkit` 0.1.97+ |
+
+What changed in the agents for AG-UI 1.0:
+
+- **Strands** — AgentCore Memory is attached with `StrandsAgentConfig.session_manager_provider` (a `session_manager` on the template `Agent` is ignored), together with `replay_history_into_strands=False` so the history is not applied twice. `state_context_builder` takes `(input_data, user_message)` and returns the user message to send. Frontend tools need no `ToolBehavior` entry.
+- **LangGraph** — no code changes; `CopilotKitMiddleware` passes the frontend tools and context of the run to the model.
+- **Events** — `RUN_STARTED` carries `protocolVersion: "1.0"` and `RUN_FINISHED` carries `outcome` and token `usage`. The 1.0 client rejects malformed events instead of ignoring them, so anything a custom agent yields must be a valid AG-UI event.
 
 ## Auth flow
 

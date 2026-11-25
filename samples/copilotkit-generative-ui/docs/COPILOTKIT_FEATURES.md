@@ -1,19 +1,47 @@
 # CopilotKit Features
 
-This sample demonstrates four CopilotKit features on top of AgentCore. Each is a thin layer on the standard CopilotKit API — full documentation is on the CopilotKit docs site.
+This sample demonstrates these CopilotKit features on top of AgentCore. Each is a thin layer on the standard CopilotKit API — full documentation is on the CopilotKit docs site.
 
 ## Generative UI
 
-The agent renders React components directly in the chat by calling frontend tools. Components are registered in the browser with `useComponent` and invoked by the agent via the AG-UI tools field.
+The agent composes UI inline in the chat from a **component catalog**. The catalog is declared once in the browser and given to the provider. It starts from `standardUI`, CopilotKit's default catalog (layout, text, inputs, `Table`, `Chart`, media and more), and adds the app's own components on top.
 
 ```typescript
-useComponent({
-  name: "barChart",
-  render: ({ data, title }) => <BarChart data={data} title={title} />,
-});
+// frontend/src/lib/generative-ui.ts
+import { createGenerativeUI, standardUI } from "@copilotkit/react-core/v2/generative-ui"
+
+export const generativeUI = createGenerativeUI({
+  id: "fast/copilotkit-generative-ui@1",
+  extends: [standardUI.omit(["Map"])],
+  components: {
+    MetricCard: {
+      component: MetricCard,
+      description: "A KPI tile: one headline number with its label and an optional change.",
+      props: MetricCardPropsSchema, // a zod object schema
+    },
+  },
+})
 ```
 
-→ [CopilotKit Generative UI docs](https://docs.copilotkit.ai/langgraph/generative-ui/your-components)
+```tsx
+<CopilotKitProvider runtimeUrl={runtimeUrl} generativeUI={{ ui: generativeUI }}>
+```
+
+How a render reaches the screen:
+
+1. The provider sends the catalog with every run.
+2. The CopilotKit Runtime gives the agent a `render_ui` tool and a guide to the catalog (as AG-UI context).
+3. The agent calls `render_ui` with operations that create and update a surface. The runtime validates each one against the catalog and streams it to the browser, so the UI builds up while the model is still writing.
+
+Nothing is registered per component on the agent side: both agents pick up `render_ui` like any other frontend tool. To add a component, add it to `components` with a `description` and a zod `props` schema. To restyle a default component, pass `overrides: { Card: { component: MyCard } }`. `Map` is left out because it needs the optional `maplibre-gl` package.
+
+> The component catalog API is marked experimental in CopilotKit 1.89. Hook-based generative UI (`useComponent`, which binds one tool to one component) still works and can be used alongside it.
+
+→ [CopilotKit Generative UI docs](https://docs.copilotkit.ai/generative-ui/components)
+
+### MCP Apps
+
+The runtime also connects to an MCP server that serves interactive UI ([Excalidraw](https://mcp.excalidraw.com) by default, override with `MCP_SERVER_URL`). It is configured with the `mcpApps` option of `CopilotRuntime` and rendered by CopilotKit without frontend code.
 
 ## Shared State
 

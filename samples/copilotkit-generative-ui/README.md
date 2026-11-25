@@ -17,8 +17,8 @@ The baseline FAST template gives you a working agent backend and a minimal React
 communicates with AgentCore directly. This sample replaces that frontend layer with CopilotKit,
 which provides:
 
-- **Generative UI** — render custom React components (charts, pickers, forms) directly from agent
-  tool calls, inline in the chat
+- **Generative UI** — the agent composes UI (charts, tables, forms, dashboards) inline in the chat
+  from a component catalog: CopilotKit's default catalog plus this app's own components
 - **Shared state** — a todo canvas that stays in sync between the agent and the UI bidirectionally
 - **Human-in-the-loop** — the agent can pause mid-run and request user input (e.g. confirm a
   meeting time) before continuing
@@ -36,7 +36,7 @@ which provides:
 | **Frontend framework** | Vanilla React + custom agentcore-client | CopilotKit (React hooks + prebuilt components) |
 | **Frontend → AgentCore** | Direct browser → AgentCore (requires SigV4) | Browser → CopilotKit Runtime Lambda → AgentCore |
 | **New infra** | — | CopilotKit Runtime Lambda + API Gateway |
-| **Generative UI** | Not included | Charts, meeting picker, inline tool rendering |
+| **Generative UI** | Not included | Component catalog (default catalog + custom `MetricCard`), meeting picker, MCP Apps, inline tool rendering |
 | **Shared state** | Not included | Todo canvas synced between agent and UI |
 | **Human-in-the-loop** | Not included | `useHumanInTheLoop` pattern with blocking tool calls |
 | **Local dev** | Manual | Docker Compose with hot reload + bridge service |
@@ -45,19 +45,19 @@ which provides:
 ### What was added
 
 - **`infra-cdk/lambdas/copilotkit-runtime/`** — Node.js Lambda running `@copilotkit/runtime`. Acts
-  as the server-side bridge between the browser and AgentCore. Includes `AgentCoreRunner`, a custom
-  runner that handles two AgentCore-specific protocol quirks:
+  as the server-side bridge between the browser and AgentCore. Uses `AgentCoreRunner` (from
+  `@copilotkit/agentcore-runner`), a runner that handles two AgentCore-specific protocol quirks:
   1. AgentCore omits `TOOL_CALL_RESULT` events from replayed history — the runner synthesises them.
   2. CopilotKit may call `connect()` before any `run()` — the runner returns an empty snapshot
      instead of erroring.
 - **`agents/langgraph-single-agent/`** — LangGraph agent with `CopilotKitMiddleware` and
   `AgentState` for shared state. Uses `LangGraphAGUIAgent` to expose the graph over AG-UI.
 - **`agents/strands-single-agent/`** — Strands agent wrapped in `StrandsAgent` (from
-  `ag_ui_strands`) with `StrandsAgentConfig` for generative UI tool behaviors.
+  `ag_ui_strands`) with `StrandsAgentConfig` for shared state and AgentCore Memory.
 - **`docker/`** — Docker Compose setup for local development. Three services: agent (port 8080),
   CopilotKit Runtime bridge (port 3001), frontend (port 3000).
-- **Frontend** — CopilotKit-powered UI with generative chart components, todo canvas, and
-  human-in-the-loop meeting scheduler.
+- **Frontend** — CopilotKit-powered UI with a generative UI component catalog
+  (`frontend/src/lib/generative-ui.ts`), todo canvas, and human-in-the-loop meeting scheduler.
 
 ### What was removed or changed
 
@@ -165,14 +165,16 @@ Open `http://localhost:3000`. The agent hot-reloads on `.py` changes.
 
 Once deployed, try these prompts to explore the features:
 
-**Generative UI — charts**
+**Generative UI — charts, tables, dashboards**
 ```
-Show me a bar chart of monthly sales data
+Show me a bar chart of our expenses by category
 ```
 ```
-Give me a pie chart of regional revenue distribution
+Build a small financial dashboard: metric cards, a chart, and a table of the underlying data
 ```
-The agent calls `query_data` first, then renders a chart component inline in the chat.
+The agent calls `query_data` first, then calls `render_ui` to compose the result from the
+component catalog: `Chart` and `Table` from CopilotKit's default catalog, `MetricCard` from this
+app. See [docs/COPILOTKIT_FEATURES.md](docs/COPILOTKIT_FEATURES.md) for how to add your own.
 
 **Shared state — todos**
 ```
@@ -202,7 +204,7 @@ continues with your selection.
 | `agents/utils/` | Shared auth (JWT extraction) and SSM utilities |
 | `infra-cdk/` | CDK stacks: Cognito, AgentCore Runtime + Gateway + Memory, CopilotKit Lambda, Amplify |
 | `infra-cdk/lambdas/copilotkit-runtime/` | The CopilotKit Runtime Lambda (Node.js) |
-| `frontend/` | Vite + React with CopilotKit chat, generative charts, todo canvas |
+| `frontend/` | Vite + React with CopilotKit chat, generative UI catalog, todo canvas |
 | `docker/` | Docker Compose for local development with hot reload |
 | `gateway/tools/sample_tool/` | Example Lambda tool exposed via AgentCore Gateway |
 | `scripts/` | Deployment utility scripts |
