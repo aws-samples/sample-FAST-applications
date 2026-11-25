@@ -8,6 +8,7 @@ import { useAuth as useOidcAuth } from "react-oidc-context"
 import { loadAwsConfig, type AwsExportsConfig } from "@/lib/runtime-config"
 import { useExampleSuggestions } from "@/hooks/useExampleSuggestions"
 import { useCopilotExamples } from "@/hooks/useCopilotExamples"
+import { generativeUI } from "@/lib/generative-ui"
 import { ThemeProvider } from "@/hooks/useTheme"
 import { TodoCanvas } from "@/components/canvas/TodoCanvas"
 import { ModeToggle } from "@/components/ui/mode-toggle"
@@ -116,6 +117,7 @@ export default function CopilotChatInterface() {
         <CopilotKitProvider
           runtimeUrl={config.copilotKitRuntimeUrl}
           headers={accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined}
+          generativeUI={{ ui: generativeUI }}
         >
           <CopilotChatContent />
         </CopilotKitProvider>

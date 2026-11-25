@@ -364,7 +364,7 @@ export class BackendStack extends cdk.NestedStack {
       "CopilotKitRuntimeLambda",
       {
         functionName: `${config.stack_name_base}-copilotkit-runtime`,
-        runtime: lambda.Runtime.NODEJS_20_X,
+        runtime: lambda.Runtime.NODEJS_22_X,
         architecture: lambda.Architecture.ARM_64,
         handler: "dist/index.handler",
         code: lambda.Code.fromAsset(
@@ -402,7 +402,7 @@ export class BackendStack extends cdk.NestedStack {
                   return true;
                 },
               },
-              image: lambda.Runtime.NODEJS_20_X.bundlingImage,
+              image: lambda.Runtime.NODEJS_22_X.bundlingImage,
               environment: {
                 NPM_CONFIG_CACHE: "/tmp/.npm",
                 NPM_CONFIG_FETCH_RETRIES: "5",
@@ -426,6 +426,9 @@ export class BackendStack extends cdk.NestedStack {
           AGENTCORE_AG_UI_URL: agentCoreAgUiUrl,
           COPILOTKIT_AGENT_NAME:
             config.backend?.pattern || "langgraph-single-agent",
+          // @copilotkit/runtime's CommonJS build requires an ESM-only
+          // dependency. Lambda turns require(esm) off unless this is set.
+          NODE_OPTIONS: "--experimental-require-module",
         },
         timeout: cdk.Duration.seconds(30),
         memorySize: 1024,
